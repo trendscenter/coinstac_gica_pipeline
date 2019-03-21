@@ -16,3 +16,9 @@
 [submodule "coinstac_dkmeans_ms"]
 	path = coinstac_dkmeans_ms
 	url = https://github.com/MRN-Code/coinstac_dkmeans_ms.git
+[submodule "decentralized_pca"]
+	path = decentralized_pca
+	url = https://github.com/rsilva8/decentralized-pca.git
+[submodule "decentralized_row_means"]
+	path = decentralized_row_means
+	url = https://github.com/rsilva8/decentralized-row-means.git
