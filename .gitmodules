@@ -1,6 +1,3 @@
-[submodule "coinstac_globalpca"]
-	path = coinstac_globalpca
-	url = https://github.com/MRN-Code/coinstac_globalpca.git
 [submodule "coinstac_gica"]
 	path = coinstac_gica
 	url = https://github.com/MRN-Code/coinstac_gica.git
