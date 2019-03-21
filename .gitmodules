@@ -1,0 +1,3 @@
+[submodule "coinstac_globalpca"]
+	path = coinstac_globalpca
+	url = https://github.com/MRN-Code/coinstac_globalpca.git
