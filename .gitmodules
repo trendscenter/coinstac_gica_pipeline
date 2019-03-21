@@ -22,3 +22,6 @@
 [submodule "decentralized_row_means"]
 	path = decentralized_row_means
 	url = https://github.com/rsilva8/decentralized-row-means.git
+[submodule "coinstac_spatially_constrained_ica"]
+	path = coinstac_spatially_constrained_ica
+	url = https://github.com/MRN-Code/coinstac_spatially_constrained_ica

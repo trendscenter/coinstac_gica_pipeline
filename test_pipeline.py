@@ -1,9 +1,16 @@
 import json
+import decentralized_pca
+import decentralized_row_means
+import coinstac_globalpca
+import coinstac_gica
+import coinstac_backreconstruction
+import coinstac_ddfnc_preproc
+import coinstac_dkmeans_ms
 
-PYTHON_CMD = "python %s/%s %s"
+PYTHON_CMD = "python %s %s"
 
 PIPELINE = [
-    'decentralized_row_means',
+    'decentralized_row_means.py',
     #    decentralized_pca
     #    coinstac_gica,
     #    coinstac_backreconstruction,
@@ -17,7 +24,7 @@ INPUTS = [
             "data": {
                 "value": [
                     [
-                        "local0.sub0.data.nifti",
+                        "local0.sub0.data.nii",
                     ],
                     [
                         "nifti"
@@ -29,7 +36,7 @@ INPUTS = [
             "data": {
                 "value": [
                     [
-                        "local1.sub1.data.nifti",
+                        "local1.sub1.data.nii",
                     ],
                     [
                         "nifti"
@@ -42,7 +49,7 @@ INPUTS = [
         "input": {
             "data": [
                 [
-                    "local0.sub0.data.nifti",
+                    "local0.sub0.data.nii",
                 ],
                 [
                     "nifti"
@@ -67,7 +74,7 @@ INPUTS = [
         "input": {
             "data": [
                 [
-                    "local1.sub1.data.nifti",
+                    "local1.sub1.data.nii",
                 ],
                 [
                     "nifti"
@@ -93,5 +100,5 @@ INPUTS = [
 
 
 for stage, inputs in zip(PIPELINE, INPUTS):
-    python_cmd = PYTHON_CMD % (stage, 'local.py', json.dumps(inputs))
+    python_cmd = PYTHON_CMD % (stage, json.dumps(inputs))
     print(python_cmd)
