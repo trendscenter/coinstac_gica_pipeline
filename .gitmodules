@@ -13,12 +13,12 @@
 [submodule "coinstac_dkmeans_ms"]
 	path = coinstac_dkmeans_ms
 	url = https://github.com/MRN-Code/coinstac_dkmeans_ms.git
-[submodule "decentralized_pca"]
-	path = decentralized_pca
-	url = https://github.com/rsilva8/decentralized-pca.git
-[submodule "decentralized_row_means"]
-	path = decentralized_row_means
-	url = https://github.com/rsilva8/decentralized-row-means.git
+[submodule "coinstac_decentralized_pca"]
+	path = coinstac_decentralized_pca
+	url = https://github.com/MRN-Code/coinstac-decentralized-pca
+[submodule "coinstac_decentralized_row_means"]
+	path = coinstac_decentralized_row_means
+	url = https://github.com/MRN-Code/coinstac-decentralized-row-means
 [submodule "coinstac_spatially_constrained_ica"]
 	path = coinstac_spatially_constrained_ica
 	url = https://github.com/MRN-Code/coinstac_spatially_constrained_ica
