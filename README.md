@@ -19,3 +19,4 @@ The stages of ddFNC are:
  - Local post-processing of timecourses (including windowing)
  - Decentralized Clustering
 
+## Stages
