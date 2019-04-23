@@ -12,8 +12,6 @@ import sys
 import copy
 import numpy as np
 import utils as ut
-import decentralized_row_means as drm
-import coinstac_spatially_constrained_ica as scica
 import phase_keys as pk
 from constants import OUTPUT_TEMPLATE
 
