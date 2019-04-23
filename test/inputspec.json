@@ -1,0 +1,76 @@
+[
+    {
+        "datafile": {
+            "value": [
+                "local0.data.csv"
+            ]
+        },
+        "ica_method": {
+            "value": [
+                "spatially constrained"
+            ]
+        },
+        "num_ics": {
+            "value": [
+                20
+            ]
+        },
+        "scica_template": {
+            "value": [
+                "NeuroMark"
+            ]
+        },
+        "fnc_method": {
+            "value": [
+                null
+            ]
+        },
+        "fnc_window_size": {
+            "value": [
+                22
+            ]
+        },
+        "dfnc_k": {
+            "value": [
+                5
+            ]
+        }
+    },
+    {
+        "datafile": {
+            "value": [
+                "local1.data.csv"
+            ]
+        },
+        "ica_method": {
+            "value": [
+                "spatially constrained"
+            ]
+        },
+        "num_ics": {
+            "value": [
+                20
+            ]
+        },
+        "scica_template": {
+            "value": [
+                "NeuroMark"
+            ]
+        },
+        "fnc_method": {
+            "value": [
+                null
+            ]
+        },
+        "fnc_window_size": {
+            "value": [
+                22
+            ]
+        },
+        "dfnc_k": {
+            "value": [
+                5
+            ]
+        }
+    }
+]

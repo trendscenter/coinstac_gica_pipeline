@@ -6,7 +6,7 @@ Created on Fri Sep 28 16:07:00 2018 (MDT)
 @author: Rogers F. Silva
 """
 
-import json
+import ujson as json
 import os
 import sys
 import numpy as np
@@ -16,11 +16,11 @@ import phase_keys as pk
 from constants import OUTPUT_TEMPLATE
 
 REMOTE_GICA_PHASES = \
-    pk.ROW_MEANS_REMOTE + \
-    pk.SPATIALLY_CONSTRAINED_ICA_REMOTE + \
-    pk.DFNC_PREPROC_REMOTE + \
-    pk.DKMEANS_REMOTE + \
-    pk.DFNC_STATS_REMOTE
+    pk.ROW_MEANS_REMOTE  # + \
+# pk.SPATIALLY_CONSTRAINED_ICA_REMOTE + \
+# pk.DFNC_PREPROC_REMOTE + \
+# pk.DKMEANS_REMOTE + \
+# pk.DFNC_STATS_REMOTE
 
 if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())

@@ -1,0 +1,66 @@
+{
+    "meta": {
+        "name": "decentralized dfnc",
+        "id": "ddfnc",
+        "version": "v1.0.0",
+        "repository": "",
+        "description": "a demo for decentralized dfnc"
+    },
+    "computation": {
+        "type": "docker",
+        "dockerImage": "ddfnc",
+        "command": [
+            "python",
+            "\/computation\/local.py"
+        ],
+        "remote": {
+            "type": "docker",
+            "dockerImage": "ddfnc",
+            "command": [
+                "python",
+                "\/computation\/remote.py"
+            ]
+        },
+        "input": {
+            "datafile": {
+                "label": "Input Data",
+                "type": "string",
+                "extensions": [
+                    [
+                        "csv"
+                    ]
+                ]
+            },
+            "num_ics": {
+                "defaultValue": 20,
+                "label": "Global Number of Independent Components",
+                "min": 1,
+                "type": "number",
+                "source": "owner"
+            },
+            "scica_template": {
+                "defaultValue": "NeuroMark",
+                "label": "Spatially Constrained ICA Template",
+                "type": "list/file"
+            },
+            "fnc_method": {
+                "defaultValue": null,
+                "label": "Kind of FNC to perform",
+                "type": "string"
+            },
+            "fnc_window_size": {
+                "defaultValue": 22,
+                "label": "Size of dFNC sliding window",
+                "type": "number",
+                "source": "owner"
+            },
+            "dfnc_k": {
+                "defaultValue": 5,
+                "label": "Number of dFNC clusters",
+                "type": "number",
+                "source": "owner"
+            }
+        },
+        "output": {}
+    }
+}
