@@ -22,22 +22,25 @@ LOCAL_GICA_PHASES = \
 # pk.DKMEANS_LOCAL + \
 # pk.DFNC_STATS_LOCAL
 
-
 if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
-    print("After phase %s" % phase_key)
-    print("Args %s" % parsed_args)
+    # #print("After phase %s" % phase_key)
+    # #print("Args %s" % parsed_args)
     for expected_phases in LOCAL_GICA_PHASES:
         if expected_phases.get('recv') == phase_key:
-            print("Doing phase %s" % expected_phases.get('recv'))
+            # #print("Doing phase %s" % expected_phases.get('recv'))
             operations = expected_phases.get('do')
             for operation in operations:
                 computation_output = operation(parsed_args)
                 parsed_args = copy.deepcopy(computation_output)
-            actual_cp = computation_output.get('output').get('computation_phase')
+            actual_cp = computation_output.get('output').get(
+                'computation_phase')
             expected_cp = expected_phases.get('send')
+            # raise (Exception(
+            #     "Expected - %s - GOT - %s - %s" %
+            #     (expected_cp, actual_cp, expected_cp == actual_cp)))
             assert (actual_cp == expected_cp), \
                 "Received phase in Local %s, Expected output phase %s, but instead got %s" % (
                     phase_key,
