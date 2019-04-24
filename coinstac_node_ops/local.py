@@ -19,12 +19,24 @@ def local_output_to_cache(args):
     return ops.output_to_cache(args, PREFIX)
 
 
+def local_output_to_input(args):
+    return ops.output_to_input(args, PREFIX)
+
+
 def local_cache_to_input(args):
     return ops.cache_to_input(args, PREFIX)
 
 
 def local_dump_cache(args):
     return ops.dump_cache(args, PREFIX)
+
+
+def local_dump_cache_to_mat(args):
+    return ops.dump_cache_to_mat(args, PREFIX)
+
+
+def local_load_cache(args):
+    return ops.load_cache(args, PREFIX)
 
 
 def local_clear_cache(args):

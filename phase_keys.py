@@ -18,15 +18,18 @@ import coinstac_dkmeans_ms.local as dkm_local
 import coinstac_dkmeans_ms.remote as dkm_remote
 
 # Init
+"""
 INIT_LOCAL = [
     dict(
         do=[
-            ops_local.local_noop,
             ops_local.local_load_datasets,
-            ops_local.local_output_to_cache
+            ops_local.local_output_to_cache,
+            ops_local.local_input_to_cache,
+            ops_local.local_dump_cache,
+            ops_local.local_clear_cache
         ],
         recv=[],
-        send='local_output_to_cache'
+        send='local_clear_cache'
     )
 ]
 INIT_REMOTE = [
@@ -43,18 +46,20 @@ INIT_REMOTE = [
 MASKING_LOCAL = [
     dict(
         do=[
+            ops_local.local_input_to_cache,
+            ops_local.local_load_cache,
             ops_local.local_cache_to_input,
-            mask_local.masking_local_1,
-            ops_local.local_output_to_cache,
-            ops_local.local_dump_cache
+            mask_local.masking_local_1
         ],
         recv='remote_noop',
-        send='local_dump_cache'
+        send='masking_local_1'
     )
 ]
 MASKING_REMOTE = [
     dict(
-        do=[mask_remote.masking_remote_1],
+        do=[
+            mask_remote.masking_remote_1
+        ],
         recv='masking_local_1',
         send='masking_remote_1'
     )
@@ -70,9 +75,43 @@ ROW_MEANS_LOCAL = [
 ]
 ROW_MEANS_REMOTE = [
     dict(
-        do=[drm_remote.drm_remote_1],
+        do=[
+            drm_remote.drm_remote_1,
+            ops_remote.remote_output_to_cache,
+            ops_remote.remote_dump_cache
+        ],
         recv=ROW_MEANS_LOCAL[0].get('send'),
-        send='drm_remote_1',
+        send='remote_dump_cache',
+    )
+]
+"""
+
+INIT_LOCAL = [
+    dict(
+        do=[
+            ops_local.local_load_datasets,
+            ops_local.local_output_to_input,
+            mask_local.masking_local_1,
+            ops_local.local_output_to_input,
+            ops_local.local_input_to_cache,
+            ops_local.local_dump_cache_to_mat,
+            ops_local.local_cache_to_input,
+            drm_local.drm_local_1,
+        ],
+        recv=[],
+        send='drm_local_1'
+    )
+]
+
+INIT_REMOTE = [
+    dict(
+        do=[
+            drm_remote.drm_remote_1,
+            ops_remote.remote_input_to_cache,
+            ops_remote.remote_dump_cache_to_mat
+        ],
+        recv=INIT_LOCAL[0].get("send"),
+        send='drm_remote_1'
     )
 ]
 
@@ -80,7 +119,7 @@ ROW_MEANS_REMOTE = [
 SPATIALLY_CONSTRAINED_ICA_LOCAL = [
     dict(
         do=[scica_local.scica_local_1],
-        recv=ROW_MEANS_REMOTE[0].get('send'),
+        recv=INIT_REMOTE[0].get('send'),
         send='scica_local_1',
     )
 ]

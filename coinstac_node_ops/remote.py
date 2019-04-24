@@ -27,5 +27,9 @@ def remote_dump_cache(args):
     return ops.dump_cache(args, PREFIX)
 
 
+def remote_dump_cache_to_mat(args):
+    return ops.dump_cache_to_mat(args, PREFIX)
+
+
 def remote_clear_cache(args):
     return ops.clear_cache(args, PREFIX)

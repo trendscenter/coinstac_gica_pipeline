@@ -6,6 +6,7 @@ Created on Thu Sep 27 17:03:00 2018 (MDT)
 @author: Rogers F. Silva
 """
 
+import logging
 import numpy as np
 import nibabel as nib
 import pandas as pd
@@ -20,11 +21,34 @@ COMPUTATION_OUTPUT = {
 }
 
 
+def log(msg, state):
+    # create logger with 'spam_application'
+    logger = logging.getLogger(state["clientId"])
+    logger.setLevel(logging.INFO)
+    # create file handler which logs even debug messages
+    if len(logger.handlers) == 0:
+        filename = os.path.join(
+            state["outputDirectory"], 'COINSTAC_%s.log' % state["clientId"])
+        fh = logging.FileHandler(filename)
+        fh.setLevel(logging.INFO)
+        # create console handler with a higher log level
+        logger.addHandler(fh)
+    logger.info(msg)
+
+
 def default_computation_output(args, template=COMPUTATION_OUTPUT):
     computation_output = copy.deepcopy(template)
     for key in args.keys():
         computation_output[key] = args[key]
     return computation_output
+
+
+def flatten_data(data):
+    shp = data.shape
+    if type(data) is np.ndarray and len(shp) >= 3:
+        newshp = [np.prod(shp[:(len(shp)-1)]), shp[-1]]
+        return np.reshape(data, newshp)
+    return data
 
 
 def listRecursive(d, key):

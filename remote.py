@@ -16,27 +16,32 @@ import phase_keys as pk
 from constants import OUTPUT_TEMPLATE
 
 REMOTE_GICA_PHASES = \
-    pk.INIT_REMOTE +\
-    pk.MASKING_LOCAL
-#    pk.ROW_MEANS_REMOTE  # + \
+    pk.INIT_REMOTE
+# pk.ROW_MEANS_REMOTE +\
+
 # pk.SPATIALLY_CONSTRAINED_ICA_REMOTE + \
 # pk.DFNC_PREPROC_REMOTE + \
 # pk.DKMEANS_REMOTE + \
 # pk.DFNC_STATS_REMOTE
 
+
 if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
+    ut.log("Starting phase %s" % phase_key, parsed_args["state"])
+    actual_cp = None
     for expected_phases in REMOTE_GICA_PHASES:
-        if expected_phases.get('recv') == phase_key:
+        if expected_phases.get('recv') == phase_key or expected_phases.get('recv') in phase_key:
             operations = expected_phases.get('do')
             for operation in operations:
-                computation_output = operation(**parsed_args)
+                computation_output = operation(parsed_args)
                 parsed_args = copy.deepcopy(computation_output)
             actual_cp = computation_output.get(
                 'output').get('computation_phase')
             expected_cp = expected_phases.get('send')
+            ut.log("Finished with phase %s" %
+                   actual_cp, parsed_args["state"])
             assert (actual_cp == expected_cp), \
                 "Received phase in Remote %s, Expected output phase %s, but instead got %s" % (
                     phase_key,
@@ -44,4 +49,7 @@ if __name__ == '__main__':
                     actual_cp
             )
             break
+    if REMOTE_GICA_PHASES[-1].get("send") == actual_cp:
+        ut.log("OK DONE", parsed_args["state"])
+        computation_output["success"] = True
     sys.stdout.write(json.dumps(computation_output))
