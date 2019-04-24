@@ -116,6 +116,18 @@ def dump_cache_to_mat(args, phase_prefix="local"):
     return computation_output
 
 
+def dump_cache_to_npy(args, phase_prefix="local"):
+    state = args['state']
+    # Compile results to be transmitted to remote and cached for reuse in next iteration
+    computation_output = ut.default_computation_output(args)
+    out_file = os.path.join(state["outputDirectory"], "cache.npy")
+    npy.save(out_file, args["cache"])
+    computation_output["output"] = {
+        "computation_phase": '%s_dump_cache_to_npy' % phase_prefix
+    }
+    return computation_output
+
+
 def load_cache(args, phase_prefix="local"):
     state = args['state']
     # Compile results to be transmitted to remote and cached for reuse in next iteration

@@ -92,14 +92,26 @@ INIT_LOCAL = [
             ops_local.local_load_datasets,
             ops_local.local_output_to_input,
             mask_local.masking_local_1,
-            ops_local.local_output_to_input,
-            ops_local.local_input_to_cache,
-            ops_local.local_dump_cache_to_mat,
+            ops_local.local_output_to_cache,
             ops_local.local_cache_to_input,
             drm_local.drm_local_1,
         ],
         recv=[],
-        send='drm_local_1'
+        send='local_init',
+        args=[
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {},
+            {},
+            {}
+        ],
     )
 ]
 
@@ -107,52 +119,93 @@ INIT_REMOTE = [
     dict(
         do=[
             drm_remote.drm_remote_1,
-            ops_remote.remote_input_to_cache,
+            ops_remote.remote_output_to_cache,
             ops_remote.remote_dump_cache_to_mat
         ],
         recv=INIT_LOCAL[0].get("send"),
-        send='drm_remote_1'
+        send='remote_init',
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {}
+        ],
+
     )
 ]
 
 # Spatially Constrained ICA
 SPATIALLY_CONSTRAINED_ICA_LOCAL = [
     dict(
-        do=[scica_local.scica_local_1],
-        recv=INIT_REMOTE[0].get('send'),
+        do=[
+            scica_local.scica_local_1,
+        ],
+        recv=[],
         send='scica_local_1',
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
     )
 ]
 SPATIALLY_CONSTRAINED_ICA_REMOTE = [
-    dict(do=[scica_remote.scica_remote_noop],
-         recv=SPATIALLY_CONSTRAINED_ICA_LOCAL[0].get('send'),
-         send='scica_remote_noop')
+    dict(
+        do=[scica_remote.scica_remote_noop],
+        recv=SPATIALLY_CONSTRAINED_ICA_LOCAL[0].get('send'),
+        send='scica_remote_finished',
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
+    )
 ]
 
 # dPCA
 DECENTRALIZED_PCA_LOCAL = [
-    dict(do=[dpca_local.dpca_local_1],
-         recv=SPATIALLY_CONSTRAINED_ICA_REMOTE[0].get('send'),
-         send='dpca_local_1')
+    dict(
+        do=[dpca_local.dpca_local_1],
+        recv=SPATIALLY_CONSTRAINED_ICA_REMOTE[0].get('send'),
+        send='dpca_local_1',
+        args=[],
+        kwargs=[],
+    )
 ]
 DECENTRALIZED_PCA_REMOTE = [
     dict(
         do=[dpca_remote.dpca_remote_1],
         recv=DECENTRALIZED_PCA_LOCAL[0].get('send'),
         send='dpca_remote_1',
+        args=[],
+        kwargs=[],
     )
 ]
 
 # Group ICA
 GROUP_ICA_LOCAL = [
-    dict(do=[gica_local.gica_local_noop],
-         recv=DECENTRALIZED_PCA_REMOTE[0].get('send'),
-         send='gica_local_noop')
+    dict(
+        do=[gica_local.gica_local_noop],
+        recv=DECENTRALIZED_PCA_REMOTE[0].get('send'),
+        send='gica_local_noop',
+        args=[],
+        kwargs=[],
+    )
 ]
 GROUP_ICA_REMOTE = [
-    dict(do=[gica_remote.gica_remote_init_env, gica_remote.gica_remote_ica],
-         recv=GROUP_ICA_LOCAL[0].get('send'),
-         send='gica_remote_ica')
+    dict(
+        do=[gica_remote.gica_remote_init_env, gica_remote.gica_remote_ica],
+        recv=GROUP_ICA_LOCAL[0].get('send'),
+        send='gica_remote_ica',
+        args=[],
+        kwargs=[],
+    )
 ]
 
 # Backreconstruction
@@ -161,12 +214,18 @@ BACKRECONSTRUCTION_LOCAL = [
         do=[br_local.br_local_1],
         recv=GROUP_ICA_REMOTE[0].get('send'),
         send='br_local_1',
+        args=[],
+        kwargs=[],
     )
 ]
 BACKRECONSTRUCTION_REMOTE = [
-    dict(do=[br_remote.br_remote_noop],
-         recv=BACKRECONSTRUCTION_LOCAL[0].get('send'),
-         send='br_remote_noop')
+    dict(
+        do=[br_remote.br_remote_noop],
+        recv=BACKRECONSTRUCTION_LOCAL[0].get('send'),
+        send='br_remote_noop',
+        args=[],
+        kwargs=[],
+    )
 ]
 
 # DDFNC
@@ -175,12 +234,18 @@ DFNC_PREPROC_LOCAL = [
         do=[dfncpp_local.br_local_compute_windows],
         recv=BACKRECONSTRUCTION_REMOTE[0].get('send'),
         send='dfncpp_local_1',
+        args=[],
+        kwargs=[],
     )
 ]
 DFNC_PREPROC_REMOTE = [
-    dict(do=[dfncpp_remote.dfncpp_remote_noop],
-         recv=DFNC_PREPROC_LOCAL[0].get('send'),
-         send='dfncpp_remote_noop')
+    dict(
+        do=[dfncpp_remote.dfncpp_remote_noop],
+        recv=DFNC_PREPROC_LOCAL[0].get('send'),
+        send='dfncpp_remote_noop',
+        args=[],
+        kwargs=[],
+    )
 ]
 
 # DKMEANS
@@ -189,24 +254,39 @@ DKMEANS_LOCAL = [  # Local 0
         do=[dkm_local.dkm_local_noop],
         recv=DFNC_PREPROC_REMOTE[0].get('send'),
         send='dkm_local_noop',
+        args=[],
+        kwargs=[],
     ),
 ]
 DKMEANS_REMOTE = [  # Remote 0
-    dict(do=[dkm_remote.dkm_remote_init_env],
-         recv=DKMEANS_LOCAL[0].get('send'),
-         send='dkm_remote_init')
+    dict(
+        do=[dkm_remote.dkm_remote_init_env],
+        recv=DKMEANS_LOCAL[0].get('send'),
+        send='dkm_remote_init',
+        args=[],
+        kwargs=[],
+    )
 ]
 
 DKMEANS_LOCAL.append(
     dict(  # Local 1
         do=[dkm_local.dkm_local_init_env, dkm_local.dkm_local_init_centroids],
         recv=DKMEANS_REMOTE[0].get('send'),
-        send='dkm_local_init_centroids'))
+        send='dkm_local_init_centroids',
+        args=[],
+        kwargs=[],
+
+    )
+)
 DKMEANS_REMOTE.append(
     dict(  # Remote 1
         do=[dkm_remote.dkm_remote_init_centroids],
         recv=DKMEANS_LOCAL[1].get('send'),
-        send='dkm_remote_init_centroids'))
+        send='dkm_remote_init_centroids',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_LOCAL.append(
     dict(  # Local 2
         do=[
@@ -214,7 +294,11 @@ DKMEANS_LOCAL.append(
             dkm_local.dkm_local_compute_optimizer
         ],
         recv=DKMEANS_REMOTE[1].get('send'),
-        send='dkm_local_compute_optimizer'))
+        send='dkm_local_compute_optimizer',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_REMOTE.append(
     dict(  # Remote 2
         do=[
@@ -222,12 +306,22 @@ DKMEANS_REMOTE.append(
             dkm_remote.dkm_remote_optimization_step
         ],
         recv=DKMEANS_LOCAL[2].get('send'),
-        send='dkm_remote_otpimization_step'), )
+        send='dkm_remote_otpimization_step',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_LOCAL.append(
     dict(  # Local 3
-        do=[dkm_local.dkm_local_compute_clustering],
+        do=[
+            dkm_local.dkm_local_compute_clustering
+        ],
         recv=DKMEANS_REMOTE[2].get('send'),
-        send='dkm_local_compute_clustering_2'))
+        send='dkm_local_compute_clustering_2',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_REMOTE.append(
     dict(  # Remote 3
         do=[
@@ -235,22 +329,38 @@ DKMEANS_REMOTE.append(
             dkm_remote.dkm_remote_aggregate_output
         ],
         recv=DKMEANS_LOCAL[3].get('send'),
-        send='dkm_remote_aggregate_output'), )
+        send='dkm_remote_aggregate_output',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_LOCAL.append(
     dict(  # Local 4
         do=[dkm_local.dkm_local_compute_optimizer],
         recv=DKMEANS_REMOTE[3].get('send') + '_false',
-        send='dkm_local_compute_optimizer'))
+        send='dkm_local_compute_optimizer',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_LOCAL.append(
     dict(  # Local 5
         do=[dkm_local.dkm_local_compute_clustering],
         recv=DKMEANS_REMOTE[3].get('send') + '_true',
-        send='dkm_local_compute_clustering'))
+        send='dkm_local_compute_clustering',
+        args=[],
+        kwargs=[],
+    )
+)
 DKMEANS_REMOTE.append(
     dict(  # Remote 5
         do=[dkm_remote.dkm_remote_stop],
         recv=DKMEANS_LOCAL[5].get('send'),
-        send='dkm_remote_stop'), )
+        send='dkm_remote_stop',
+        args=[],
+        kwargs=[],
+    )
+)
 # END DKMEANS
 
 DFNC_STATS_LOCAL = [
@@ -258,8 +368,16 @@ DFNC_STATS_LOCAL = [
         do=[],
         recv=DKMEANS_REMOTE[4].get('send'),
         send='dkm_local_stats',
+        args=[],
+        kwargs=[],
     )
 ]
 DFNC_STATS_REMOTE = [
-    dict(do=[], recv=DFNC_STATS_LOCAL[0].get('send'), send='dkm_remote_stats')
+    dict(
+        do=[],
+        recv=DFNC_STATS_LOCAL[0].get('send'),
+        send='dkm_remote_stats',
+        args=[],
+        kwargs=[],
+    )
 ]

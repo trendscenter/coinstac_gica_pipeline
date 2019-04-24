@@ -45,7 +45,7 @@
                 "source": "owner"
             },
             "scica_template": {
-                "defaultValue": "NeuroMark",
+                "defaultValue": "NeuroMark.nii",
                 "label": "Spatially Constrained ICA Template",
                 "type": "list/file"
             },

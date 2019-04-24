@@ -22,7 +22,7 @@
         },
         "scica_template": {
             "value": [
-                "NeuroMark"
+                "NeuroMark.nii"
             ]
         },
         "fnc_method": {
@@ -64,7 +64,7 @@
         },
         "scica_template": {
             "value": [
-                "NeuroMark"
+                "NeuroMark.nii"
             ]
         },
         "fnc_method": {

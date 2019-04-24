@@ -12,6 +12,7 @@ import nibabel as nib
 import pandas as pd
 import os
 import copy
+import utils as ut
 
 COMPUTATION_OUTPUT = {
     "input": dict(),
@@ -43,9 +44,9 @@ def default_computation_output(args, template=COMPUTATION_OUTPUT):
     return computation_output
 
 
-def flatten_data(data):
+def flatten_data(data, state):
     shp = data.shape
-    if type(data) is np.ndarray and len(shp) >= 3:
+    if len(shp) >= 3:
         newshp = [np.prod(shp[:(len(shp)-1)]), shp[-1]]
         return np.reshape(data, newshp)
     return data
@@ -68,6 +69,14 @@ def read_data_csv(filename, baseDir, clientId, data_colname="nii"):
     return read_data(file_list, "nii", clientId)
 
 
+def read_file_list_csv(filename, baseDir, clientId, data_colname="nii"):
+    file_list = [
+        os.path.join(baseDir, f)
+        for f in list(pd.read_csv(filename)[data_colname])
+    ]
+    return file_list
+
+
 def read_data(file_list, file_type, clientId):
     """ Read data files.
     """
@@ -80,7 +89,7 @@ def read_data(file_list, file_type, clientId):
             if file_type == 'npzfile':
                 datasets[str(ix)] = np.load(filename)['dataset'].T
             if file_type == 'nii':
-                datasets[str(ix)] = nib.load(filename).get_data()
+                datasets[str(ix)] = np.array(nib.load(filename).get_data())
     else:
         raise ValueError(
             "No files listed for site: {localID}".format(localID=clientId))
