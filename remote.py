@@ -16,7 +16,9 @@ import phase_keys as pk
 from constants import OUTPUT_TEMPLATE
 
 REMOTE_GICA_PHASES = \
-    pk.ROW_MEANS_REMOTE  # + \
+    pk.INIT_REMOTE +\
+    pk.MASKING_LOCAL
+#    pk.ROW_MEANS_REMOTE  # + \
 # pk.SPATIALLY_CONSTRAINED_ICA_REMOTE + \
 # pk.DFNC_PREPROC_REMOTE + \
 # pk.DKMEANS_REMOTE + \
@@ -32,7 +34,8 @@ if __name__ == '__main__':
             for operation in operations:
                 computation_output = operation(**parsed_args)
                 parsed_args = copy.deepcopy(computation_output)
-            actual_cp = computation_output.get('output').get('computation_phase')
+            actual_cp = computation_output.get(
+                'output').get('computation_phase')
             expected_cp = expected_phases.get('send')
             assert (actual_cp == expected_cp), \
                 "Received phase in Remote %s, Expected output phase %s, but instead got %s" % (
@@ -41,3 +44,4 @@ if __name__ == '__main__':
                     actual_cp
             )
             break
+    sys.stdout.write(json.dumps(computation_output))

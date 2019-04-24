@@ -5,6 +5,11 @@
                 "local0.data.csv"
             ]
         },
+        "mask": {
+            "value": [
+                "mask.nii"
+            ]
+        },
         "ica_method": {
             "value": [
                 "spatially constrained"
@@ -40,6 +45,11 @@
         "datafile": {
             "value": [
                 "local1.data.csv"
+            ]
+        },
+        "mask": {
+            "value": [
+                "mask.nii"
             ]
         },
         "ica_method": {

@@ -1,3 +1,7 @@
+import coinstac_node_ops.local as ops_local
+import coinstac_node_ops.remote as ops_remote
+import coinstac_masking.local as mask_local
+import coinstac_masking.remote as mask_remote
 import coinstac_decentralized_row_means.local as drm_local
 import coinstac_decentralized_row_means.remote as drm_remote
 import coinstac_spatially_constrained_ica.local as scica_local
@@ -13,11 +17,54 @@ import coinstac_ddfnc_preproc.remote as dfncpp_remote
 import coinstac_dkmeans_ms.local as dkm_local
 import coinstac_dkmeans_ms.remote as dkm_remote
 
+# Init
+INIT_LOCAL = [
+    dict(
+        do=[
+            ops_local.local_noop,
+            ops_local.local_load_datasets,
+            ops_local.local_output_to_cache
+        ],
+        recv=[],
+        send='local_output_to_cache'
+    )
+]
+INIT_REMOTE = [
+    dict(
+        do=[
+            ops_remote.remote_noop,
+        ],
+        recv=INIT_LOCAL[0].get("send"),
+        send='remote_noop'
+    )
+]
+
+# Masking
+MASKING_LOCAL = [
+    dict(
+        do=[
+            ops_local.local_cache_to_input,
+            mask_local.masking_local_1,
+            ops_local.local_output_to_cache,
+            ops_local.local_dump_cache
+        ],
+        recv='remote_noop',
+        send='local_dump_cache'
+    )
+]
+MASKING_REMOTE = [
+    dict(
+        do=[mask_remote.masking_remote_1],
+        recv='masking_local_1',
+        send='masking_remote_1'
+    )
+]
+
 # Row Means
 ROW_MEANS_LOCAL = [
     dict(
         do=[drm_local.drm_local_1],
-        recv=[],
+        recv='masking_remote_1',
         send='drm_local_1',
     )
 ]

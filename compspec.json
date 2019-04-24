@@ -31,6 +31,12 @@
                     ]
                 ]
             },
+            "mask": {
+                "defaultValue": "mask.nii",
+                "label": "Mask",
+                "type": "string",
+                "source": "owner"
+            },
             "num_ics": {
                 "defaultValue": 20,
                 "label": "Global Number of Independent Components",

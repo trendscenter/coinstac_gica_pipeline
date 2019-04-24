@@ -10,6 +10,21 @@ import numpy as np
 import nibabel as nib
 import pandas as pd
 import os
+import copy
+
+COMPUTATION_OUTPUT = {
+    "input": dict(),
+    "output": dict(),
+    "state": dict(),
+    "cache": dict()
+}
+
+
+def default_computation_output(args, template=COMPUTATION_OUTPUT):
+    computation_output = copy.deepcopy(template)
+    for key in args.keys():
+        computation_output[key] = args[key]
+    return computation_output
 
 
 def listRecursive(d, key):
@@ -42,8 +57,6 @@ def read_data(file_list, file_type, clientId):
                 datasets[str(ix)] = np.load(filename)['dataset'].T
             if file_type == 'nii':
                 datasets[str(ix)] = nib.load(filename).get_data()
-            raise (Exception("Shape of Data is %s" %
-                             (str(datasets[str(ix)].shape))))
     else:
         raise ValueError(
             "No files listed for site: {localID}".format(localID=clientId))
