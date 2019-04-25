@@ -18,7 +18,9 @@ else
   #LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/bin/glnxa64 ;
   #LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64;
   #LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/MATLAB/MATLAB_Runtime/v901/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v901/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v901/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v901/sys/opengl/lib/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v901/sys/java/jre/glnxa64/jre/lib/amd64/native_threads:/usr/local/MATLAB/MATLAB_Runtime/v901/sys/java/jre/glnxa64/jre/lib/amd64/server:/usr/local/MATLAB/MATLAB_Runtime/v901/sys/java/jre/glnxa64/jre/lib/amd64
   #export LD_LIBRARY_PATH;
+  export MCRROOT=/usr/local/MATLAB/MATLAB_Runtime/v901
   echo LD_LIBRARY_PATH is ${LD_LIBRARY_PATH};
   shift 1
   args=
@@ -27,6 +29,8 @@ else
       args="${args} \"${token}\"" 
       shift
   done
+  echo execution directory is ${exe_dir}
+  echo args are ${args}
   eval "\"${exe_dir}/groupica\"" $args
 fi
 exit
