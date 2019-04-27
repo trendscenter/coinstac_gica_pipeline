@@ -20,11 +20,14 @@ LOCAL_SCICA_PHASES = \
     pk.SPATIALLY_CONSTRAINED_ICA_LOCAL
 
 if __name__ == '__main__':
+
+    PIPELINE = LOCAL_SCICA_PHASES
+
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
     ut.log("Starting phase %s" % phase_key, parsed_args["state"])
-    for expected_phases in LOCAL_SCICA_PHASES:
+    for i, expected_phases in enumerate(PIPELINE):
         ut.log("Expecting phase %s, Got phase %s" %
                (expected_phases.get("recv"), phase_key), parsed_args["state"])
         if expected_phases.get('recv') == phase_key or expected_phases.get('recv') in phase_key:
@@ -64,6 +67,8 @@ if __name__ == '__main__':
             ut.log("Finished with phase %s" %
                    expected_phases.get("send"), parsed_args["state"])
             break
+    ut.log("Full output is %s" %
+           (str(computation_output)), parsed_args["state"])
     ut.log("Computation output looks like %s" %
            (str(computation_output["output"].keys())), parsed_args["state"])
     sys.stdout.write(json.dumps(computation_output))

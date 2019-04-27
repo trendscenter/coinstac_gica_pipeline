@@ -86,6 +86,38 @@ ROW_MEANS_REMOTE = [
 ]
 """
 
+NOOP_LOCAL = [
+    dict(
+        do=[
+            ops_local.local_noop
+        ],
+        recv=[],
+        send='local_noop',
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ]
+    )
+]
+
+NOOP_REMOTE = [
+    dict(
+        do=[
+            ops_remote.remote_noop
+        ],
+        recv="local_noop",
+        send='remote_noop',
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ]
+    )
+]
+
 INIT_LOCAL = [
     dict(
         do=[
@@ -156,7 +188,7 @@ SPATIALLY_CONSTRAINED_ICA_LOCAL = [
 ]
 SPATIALLY_CONSTRAINED_ICA_REMOTE = [
     dict(
-        do=[scica_remote.scica_remote_noop],
+        do=[ops_remote.remote_noop],
         recv=SPATIALLY_CONSTRAINED_ICA_LOCAL[0].get('send'),
         send='scica_remote_finished',
         args=[

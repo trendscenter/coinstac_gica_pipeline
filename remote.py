@@ -21,12 +21,15 @@ REMOTE_SCICA_PHASES = \
 
 
 if __name__ == '__main__':
+
+    PIPELINE = REMOTE_SCICA_PHASES
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
     ut.log("Starting phase %s" % phase_key, parsed_args["state"])
     actual_cp = None
-    for expected_phases in REMOTE_SCICA_PHASES:
+
+    for i, expected_phases in enumerate(PIPELINE):
         if expected_phases.get('recv') == phase_key or expected_phases.get('recv') in phase_key:
             operations = expected_phases.get('do')
             operation_args = expected_phases.get('args')
@@ -57,12 +60,15 @@ if __name__ == '__main__':
                 parsed_args = copy.deepcopy(computation_output)
                 ut.log("Finished with operation %s" %
                        (operation.__name__), parsed_args["state"])
-            computation_output["success"] = True
+            if i+1 == len(PIPELINE):
+                computation_output["success"] = True
             computation_output["output"]["computation_phase"] = expected_phases.get(
                 'send')
             ut.log("Finished with phase %s" %
                    expected_phases.get("send"), parsed_args["state"])
             break
+    ut.log("Full output is %s" %
+           (str(computation_output)), parsed_args["state"])
     ut.log("Computation output looks like %s" %
            (str(computation_output["output"].keys())), parsed_args["state"])
     sys.stdout.write(json.dumps(computation_output))
