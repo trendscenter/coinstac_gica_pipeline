@@ -17,8 +17,10 @@ from constants import OUTPUT_TEMPLATE
 
 
 REMOTE_SCICA_PHASES = \
-    pk.SPATIALLY_CONSTRAINED_ICA_REMOTE
-
+    pk.SPATIALLY_CONSTRAINED_ICA_REMOTE + \
+    pk.DFNC_PREPROC_REMOTE_EXEMPLARS + \
+    pk.DFNC_PREPROC_REMOTE + \
+    pk.DKMEANS_REMOTE[:2]
 
 if __name__ == '__main__':
 
@@ -26,7 +28,9 @@ if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
-    ut.log("Starting phase %s" % phase_key, parsed_args["state"])
+    ut.log("Starting remote phase %s" % phase_key, parsed_args["state"])
+    ut.log("With input %s" % str(parsed_args), parsed_args["state"])
+
     actual_cp = None
 
     for i, expected_phases in enumerate(PIPELINE):

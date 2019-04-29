@@ -96,7 +96,7 @@ def dump_cache(args, phase_prefix="local"):
     state = args['state']
     # Compile results to be transmitted to remote and cached for reuse in next iteration
     computation_output = ut.default_computation_output(args)
-    out_file = os.path.join(state["outputDirectory"], "cache.json")
+    out_file = os.path.join(state["cacheDirectory"], "cache.json")
     json.dump(args["cache"], open(out_file,  "w", encoding="utf8"))
     computation_output["output"] = {
         "computation_phase": '%s_dump_cache' % phase_prefix
@@ -108,7 +108,7 @@ def dump_cache_to_mat(args, phase_prefix="local"):
     state = args['state']
     # Compile results to be transmitted to remote and cached for reuse in next iteration
     computation_output = ut.default_computation_output(args)
-    out_file = os.path.join(state["outputDirectory"], "cache.mat")
+    out_file = os.path.join(state["cacheDirectory"], "cache.mat")
     sio.savemat(out_file, args["cache"])
     computation_output["output"] = {
         "computation_phase": '%s_dump_cache_to_mat' % phase_prefix
@@ -120,8 +120,8 @@ def dump_cache_to_npy(args, phase_prefix="local"):
     state = args['state']
     # Compile results to be transmitted to remote and cached for reuse in next iteration
     computation_output = ut.default_computation_output(args)
-    out_file = os.path.join(state["outputDirectory"], "cache.npy")
-    npy.save(out_file, args["cache"])
+    out_file = os.path.join(state["cacheDirectory"], "cache.npy")
+    np.save(out_file, args["cache"])
     computation_output["output"] = {
         "computation_phase": '%s_dump_cache_to_npy' % phase_prefix
     }
@@ -132,8 +132,23 @@ def load_cache(args, phase_prefix="local"):
     state = args['state']
     # Compile results to be transmitted to remote and cached for reuse in next iteration
     computation_output = ut.default_computation_output(args)
-    in_file = os.path.join(state["outputDirectory"], "cache.json")
+    in_file = os.path.join(state["cacheDirectory"], "cache.json")
     loaded = json.load(open(in_file,  "r", encoding="utf8"))
+    computation_output["output"] = {
+        "computation_phase": '%s_dump_cache' % phase_prefix
+    }
+    for key in loaded.keys():
+        computation_output["cache"][key] = loaded[key]
+
+    return computation_output
+
+
+def load_cache_from_npy(args, phase_prefix="local"):
+    state = args['state']
+    # Compile results to be transmitted to remote and cached for reuse in next iteration
+    computation_output = ut.default_computation_output(args)
+    in_file = os.path.join(state["cacheDirectory"], "cache.npy")
+    loaded = np.load(in_file).item()
     computation_output["output"] = {
         "computation_phase": '%s_dump_cache' % phase_prefix
     }
@@ -151,4 +166,64 @@ def clear_cache(args, phase_prefix="local"):
         "computation_phase": '%s_clear_cache' % phase_prefix
     }
     computation_output["cache"] = dict()
+    return computation_output
+
+
+def load_cache_from_file(args, filename="cache.json", phase_prefix="local", keys=[], **kwargs):
+    state = args['state']
+    # Compile results to be transmitted to remote and cached for reuse in next iteration
+    computation_output = ut.default_computation_output(args)
+    in_file = os.path.join(state["cacheDirectory"], filename)
+    prefix, ext = os.path.splitext(filename)
+    loaded = dict()
+    try:
+        if 'npy' in ext:
+            loaded = np.load(in_file).item()
+        elif 'json' in ext:
+            loaded = json.load(open(in_file, "r", encoding="utf8"))
+        elif 'pkl' in ext:
+            loaded = pickle.load(open(in_file, "r", encoding="utf8"))
+        elif 'mat' in ext:
+            loaded = sio.loadmat(in_file)
+    except Exception:
+        pass
+    computation_output["output"] = {
+        "computation_phase": '%s_load_cache' % phase_prefix
+    }
+    if len(keys) == 0:
+        keys = loaded.keys()
+    else:
+        keys = [k for k in keys if k in loaded.keys()]
+    for key in keys:
+        computation_output["cache"][key] = loaded[key]
+    return computation_output
+
+
+def dump_cache_to_file(args, filename="cache.json", phase_prefix="local", keys=[], **kwargs):
+    state = args['state']
+    cache = args['cache']
+    if len(keys) == 0:
+        keys = cache.keys()
+    else:
+        keys = [k for k in keys if k in cache.keys()]
+    cache = {k: v for k, v in cache.items() if k in keys}
+    # Compile results to be transmitted to remote and cached for reuse in next iteration
+    computation_output = ut.default_computation_output(args)
+    in_file = os.path.join(state["cacheDirectory"], filename)
+    prefix, ext = os.path.splitext(filename)
+    loaded = dict()
+    try:
+        if 'npy' in ext:
+            np.save(in_file)
+        elif 'json' in ext:
+            json.dump(cache, open(in_file, "r", encoding="utf8"))
+        elif 'pkl' in ext:
+            pickle.load(cache, open(in_file, "r", encoding="utf8"))
+        elif 'mat' in ext:
+            sio.savemat(in_file, cache)
+    except Exception:
+        pass
+    computation_output["output"] = {
+        "computation_phase": '%s_dump_cache' % phase_prefix
+    }
     return computation_output

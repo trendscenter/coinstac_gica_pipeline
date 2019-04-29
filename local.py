@@ -17,7 +17,10 @@ from constants import OUTPUT_TEMPLATE
 
 
 LOCAL_SCICA_PHASES = \
-    pk.SPATIALLY_CONSTRAINED_ICA_LOCAL
+    pk.SPATIALLY_CONSTRAINED_ICA_LOCAL + \
+    pk.DFNC_PREPROC_LOCAL_EXEMPLARS + \
+    pk.DFNC_PREPROC_LOCAL + \
+    pk.DKMEANS_LOCAL[:2]
 
 if __name__ == '__main__':
 
@@ -26,7 +29,10 @@ if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
-    ut.log("Starting phase %s" % phase_key, parsed_args["state"])
+    if not phase_key:
+        ut.log("***************************************", parsed_args["state"])
+    ut.log("Starting local phase %s" % phase_key, parsed_args["state"])
+    ut.log("With input %s" % str(parsed_args), parsed_args["state"])
     for i, expected_phases in enumerate(PIPELINE):
         ut.log("Expecting phase %s, Got phase %s" %
                (expected_phases.get("recv"), phase_key), parsed_args["state"])
@@ -37,30 +43,37 @@ if __name__ == '__main__':
             operation_kwargs = expected_phases.get('kwargs')
             for operation, args, kwargs in zip(operations, operation_args, operation_kwargs):
                 try:
-                    ut.log("Trying operation %s, with args, and kwargs" %
-                           (operation.__name__), parsed_args["state"])
+                    ut.log("Trying operation %s, with args %s, and kwargs %s" %
+                           (operation.__name__, str(args), str(kwargs)), parsed_args["state"])
                     computation_output = operation(parsed_args,
                                                    *args,
                                                    **kwargs)
-                except NameError:
+                except NameError as akerr:
+                    ut.log("Hit expected error %s" %
+                           (str(akerr)), parsed_args["state"])
                     try:
-                        ut.log("Trying operation %s, with args only" %
+                        ut.log("Trying operation %s, with kwargs only" %
                                (operation.__name__), parsed_args["state"])
                         computation_output = operation(parsed_args,
-                                                       *args)
-                    except NameError:
+                                                       **kwargs)
+                    except NameError as kerr:
+                        ut.log("Hit expected error %s" %
+                               (str(kerr)), parsed_args["state"])
                         try:
-                            ut.log("Trying operation %s, with kwargs only" %
+                            ut.log("Trying operation %s, with args only" %
                                    (operation.__name__), parsed_args["state"])
                             computation_output = operation(parsed_args,
-                                                           **kwargs)
-                        except NameError:
+                                                           *args)
+                        except NameError as err:
+                            ut.log("Hit expected error %s" %
+                                   (str(err)), parsed_args["state"])
                             ut.log("Trying operation %s, with no args or kwargs" %
                                    (operation.__name__), parsed_args["state"])
                             computation_output = operation(parsed_args)
                 parsed_args = copy.deepcopy(computation_output)
                 ut.log("Finished with operation %s" %
                        (operation.__name__), parsed_args["state"])
+                ut.log("Operation output is %s" % str(parsed_args), parsed_args["state"])
             computation_output["output"]["computation_phase"] = expected_phases.get(
                 'send'
             )

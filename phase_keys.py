@@ -175,22 +175,33 @@ SPATIALLY_CONSTRAINED_ICA_LOCAL = [
     dict(
         do=[
             scica_local.scica_local_1,
+            ops_local.local_output_to_cache,
+            ops_local.local_dump_cache_to_npy,
+            ops_local.local_clear_cache
         ],
         recv=[],
         send='scica_local_1',
         args=[
+            [],
+            [],
+            [],
             []
         ],
         kwargs=[
+            {},
+            {},
+            {},
             {}
         ],
     )
 ]
 SPATIALLY_CONSTRAINED_ICA_REMOTE = [
     dict(
-        do=[ops_remote.remote_noop],
+        do=[
+            ops_remote.remote_noop
+        ],
         recv=SPATIALLY_CONSTRAINED_ICA_LOCAL[0].get('send'),
-        send='scica_remote_finished',
+        send='scica_remote_noop',
         args=[
             []
         ],
@@ -200,74 +211,70 @@ SPATIALLY_CONSTRAINED_ICA_REMOTE = [
     )
 ]
 
-# dPCA
-DECENTRALIZED_PCA_LOCAL = [
-    dict(
-        do=[dpca_local.dpca_local_1],
-        recv=SPATIALLY_CONSTRAINED_ICA_REMOTE[0].get('send'),
-        send='dpca_local_1',
-        args=[],
-        kwargs=[],
-    )
-]
-DECENTRALIZED_PCA_REMOTE = [
-    dict(
-        do=[dpca_remote.dpca_remote_1],
-        recv=DECENTRALIZED_PCA_LOCAL[0].get('send'),
-        send='dpca_remote_1',
-        args=[],
-        kwargs=[],
-    )
-]
-
-# Group ICA
-GROUP_ICA_LOCAL = [
-    dict(
-        do=[gica_local.gica_local_noop],
-        recv=DECENTRALIZED_PCA_REMOTE[0].get('send'),
-        send='gica_local_noop',
-        args=[],
-        kwargs=[],
-    )
-]
-GROUP_ICA_REMOTE = [
-    dict(
-        do=[gica_remote.gica_remote_init_env, gica_remote.gica_remote_ica],
-        recv=GROUP_ICA_LOCAL[0].get('send'),
-        send='gica_remote_ica',
-        args=[],
-        kwargs=[],
-    )
-]
-
-# Backreconstruction
-BACKRECONSTRUCTION_LOCAL = [
-    dict(
-        do=[br_local.br_local_1],
-        recv=GROUP_ICA_REMOTE[0].get('send'),
-        send='br_local_1',
-        args=[],
-        kwargs=[],
-    )
-]
-BACKRECONSTRUCTION_REMOTE = [
-    dict(
-        do=[br_remote.br_remote_noop],
-        recv=BACKRECONSTRUCTION_LOCAL[0].get('send'),
-        send='br_remote_noop',
-        args=[],
-        kwargs=[],
-    )
-]
-
 # DDFNC
+DFNC_PREPROC_LOCAL_EXEMPLARS = [
+    dict(
+        do=[
+            ops_local.local_load_cache_from_npy,
+            ops_local.local_cache_to_input,
+            dfncpp_local.br_local_compute_windows,
+            ops_local.local_output_to_cache,
+            ops_local.local_dump_cache_to_file
+        ],
+        recv=SPATIALLY_CONSTRAINED_ICA_REMOTE[0].get('send'),
+        send='dfncpp_local_exemplars_1',
+        args=[
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {'exemplar': True},
+            {},
+            {'filename': "exemplar_window_filenames.json"}
+        ],
+    )
+]
+
+DFNC_PREPROC_REMOTE_EXEMPLARS = [
+    dict(
+        do=[dfncpp_remote.dfncpp_remote_noop],
+        recv=DFNC_PREPROC_LOCAL_EXEMPLARS[0].get('send'),
+        send='dfncpp_remote_exemplars_noop',
+        args=[],
+        kwargs=[],
+    )
+]
+
 DFNC_PREPROC_LOCAL = [
     dict(
-        do=[dfncpp_local.br_local_compute_windows],
-        recv=BACKRECONSTRUCTION_REMOTE[0].get('send'),
+        do=[
+            ops_local.local_load_cache_from_npy,
+            ops_local.local_cache_to_input,
+            dfncpp_local.br_local_compute_windows,
+            ops_local.local_output_to_cache,
+            ops_local.local_dump_cache_to_file
+        ],
+        recv=DFNC_PREPROC_REMOTE_EXEMPLARS[0].get('send'),
         send='dfncpp_local_1',
-        args=[],
-        kwargs=[],
+        args=[
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {"exemplar": False},
+            {},
+            {'filename': "window_filenames.json"}
+        ],
     )
 ]
 DFNC_PREPROC_REMOTE = [
@@ -280,14 +287,21 @@ DFNC_PREPROC_REMOTE = [
     )
 ]
 
+
 # DKMEANS
 DKMEANS_LOCAL = [  # Local 0
     dict(
-        do=[dkm_local.dkm_local_noop],
+        do=[
+            ops_local.local_noop
+        ],
         recv=DFNC_PREPROC_REMOTE[0].get('send'),
         send='dkm_local_noop',
-        args=[],
-        kwargs=[],
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
     ),
 ]
 DKMEANS_REMOTE = [  # Remote 0
@@ -295,30 +309,59 @@ DKMEANS_REMOTE = [  # Remote 0
         do=[dkm_remote.dkm_remote_init_env],
         recv=DKMEANS_LOCAL[0].get('send'),
         send='dkm_remote_init',
-        args=[],
-        kwargs=[],
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
     )
 ]
 
 DKMEANS_LOCAL.append(
     dict(  # Local 1
-        do=[dkm_local.dkm_local_init_env, dkm_local.dkm_local_init_centroids],
+        do=[
+            ops_local.local_load_cache_from_file,
+            ops_local.local_cache_to_input,
+            dkm_local.dkm_local_init_env,
+            ops_local.local_output_to_input,
+            dkm_local.dkm_local_init_centroids
+        ],
         recv=DKMEANS_REMOTE[0].get('send'),
         send='dkm_local_init_centroids',
-        args=[],
-        kwargs=[],
+        args=[
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {'filename': 'exemplar_window_filenames.json', 'keys': ['all_windows']},
+            {},
+            {},
+            {},
+            {}
+        ],
 
     )
 )
 DKMEANS_REMOTE.append(
     dict(  # Remote 1
-        do=[dkm_remote.dkm_remote_init_centroids],
+        do=[
+            dkm_remote.dkm_remote_init_centroids
+        ],
         recv=DKMEANS_LOCAL[1].get('send'),
         send='dkm_remote_init_centroids',
-        args=[],
-        kwargs=[],
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
     )
 )
+
 DKMEANS_LOCAL.append(
     dict(  # Local 2
         do=[
