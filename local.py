@@ -80,8 +80,6 @@ if __name__ == '__main__':
             ut.log("Finished with phase %s" %
                    expected_phases.get("send"), parsed_args["state"])
             break
-    ut.log("Full output is %s" %
-           (str(computation_output)), parsed_args["state"])
-    ut.log("Computation output looks like %s" %
-           (str(computation_output["output"].keys())), parsed_args["state"])
+    ut.log("Computation output looks like %s, and output keys %s" %
+           (str(computation_output.keys()), str(computation_output["output"].keys())), parsed_args["state"])
     sys.stdout.write(json.dumps(computation_output))

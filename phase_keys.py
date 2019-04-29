@@ -279,7 +279,7 @@ DFNC_PREPROC_LOCAL = [
 ]
 DFNC_PREPROC_REMOTE = [
     dict(
-        do=[dfncpp_remote.dfncpp_remote_noop],
+        do=[ops_remote.remote_noop],
         recv=DFNC_PREPROC_LOCAL[0].get('send'),
         send='dfncpp_remote_noop',
         args=[],
@@ -306,14 +306,22 @@ DKMEANS_LOCAL = [  # Local 0
 ]
 DKMEANS_REMOTE = [  # Remote 0
     dict(
-        do=[dkm_remote.dkm_remote_init_env],
+        do=[
+            dkm_remote.dkm_remote_init_env,
+            ops_remote.remote_output_to_cache,
+            ops_remote.remote_dump_cache_to_file
+        ],
         recv=DKMEANS_LOCAL[0].get('send'),
         send='dkm_remote_init',
         args=[
+            [],
+            [],
             []
         ],
         kwargs=[
-            {}
+            {},
+            {},
+            {"filename": "dkm_inputs.npy"}
         ],
     )
 ]
@@ -349,15 +357,15 @@ DKMEANS_LOCAL.append(
 DKMEANS_REMOTE.append(
     dict(  # Remote 1
         do=[
-            dkm_remote.dkm_remote_init_centroids
+            dkm_remote.dkm_remote_init_centroids,
         ],
         recv=DKMEANS_LOCAL[1].get('send'),
         send='dkm_remote_init_centroids',
         args=[
-            []
+            [],
         ],
         kwargs=[
-            {}
+            {},
         ],
     )
 )

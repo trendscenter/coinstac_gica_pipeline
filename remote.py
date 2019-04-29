@@ -29,7 +29,8 @@ if __name__ == '__main__':
     phase_key = list(ut.listRecursive(parsed_args, 'computation_phase'))
     computation_output = copy.deepcopy(OUTPUT_TEMPLATE)
     ut.log("Starting remote phase %s" % phase_key, parsed_args["state"])
-    ut.log("With input %s" % str(parsed_args), parsed_args["state"])
+    ut.log("With input %s, and input keys %s" %
+           (str(parsed_args.keys()), str(parsed_args['input'].keys())), parsed_args["state"])
 
     actual_cp = None
 
@@ -47,16 +48,16 @@ if __name__ == '__main__':
                                                    **kwargs)
                 except NameError:
                     try:
-                        ut.log("Trying operation %s, with args only" %
+                        ut.log("Trying operation %s, with kwargs only" %
                                (operation.__name__), parsed_args["state"])
                         computation_output = operation(parsed_args,
-                                                       *args)
+                                                       **kwargs)
                     except NameError:
                         try:
-                            ut.log("Trying operation %s, with kwargs only" %
+                            ut.log("Trying operation %s, with args only" %
                                    (operation.__name__), parsed_args["state"])
                             computation_output = operation(parsed_args,
-                                                           **kwargs)
+                                                           *args)
                         except NameError:
                             ut.log("Trying operation %s, with no args or kwargs" %
                                    (operation.__name__), parsed_args["state"])
@@ -64,6 +65,8 @@ if __name__ == '__main__':
                 parsed_args = copy.deepcopy(computation_output)
                 ut.log("Finished with operation %s" %
                        (operation.__name__), parsed_args["state"])
+                ut.log("Operation output is %s, output keys %s" %
+                       (str(parsed_args.keys()), str(parsed_args['output'].keys())), parsed_args["state"])
             if i+1 == len(PIPELINE):
                 computation_output["success"] = True
             computation_output["output"]["computation_phase"] = expected_phases.get(
@@ -71,8 +74,7 @@ if __name__ == '__main__':
             ut.log("Finished with phase %s" %
                    expected_phases.get("send"), parsed_args["state"])
             break
-    ut.log("Full output is %s" %
-           (str(computation_output)), parsed_args["state"])
-    ut.log("Computation output looks like %s" %
-           (str(computation_output["output"].keys())), parsed_args["state"])
+    ut.log("Computation output looks like %s, and output keys %s" %
+           (str(computation_output.keys()), str(computation_output["output"].keys())), parsed_args["state"])
+
     sys.stdout.write(json.dumps(computation_output))
