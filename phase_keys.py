@@ -330,7 +330,6 @@ DKMEANS_LOCAL.append(
     dict(  # Local 1
         do=[
             ops_local.local_load_cache_from_file,
-            ops_local.local_cache_to_input,
             dkm_local.dkm_local_init_env,
             ops_local.local_output_to_input,
             dkm_local.dkm_local_init_centroids
@@ -341,12 +340,10 @@ DKMEANS_LOCAL.append(
             [],
             [],
             [],
-            [],
             []
         ],
         kwargs=[
             {'filename': 'exemplar_window_filenames.json', 'keys': ['all_windows']},
-            {},
             {},
             {},
             {}
@@ -374,24 +371,42 @@ DKMEANS_LOCAL.append(
     dict(  # Local 2
         do=[
             dkm_local.dkm_local_compute_clustering,
+            ops_local.local_output_to_input,
             dkm_local.dkm_local_compute_optimizer
         ],
         recv=DKMEANS_REMOTE[1].get('send'),
         send='dkm_local_compute_optimizer',
-        args=[],
-        kwargs=[],
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {}
+        ],
     )
 )
 DKMEANS_REMOTE.append(
     dict(  # Remote 2
         do=[
             dkm_remote.dkm_remote_aggregate_optimizer,
+            ops_remote.remote_output_to_input,
             dkm_remote.dkm_remote_optimization_step
         ],
         recv=DKMEANS_LOCAL[2].get('send'),
         send='dkm_remote_otpimization_step',
-        args=[],
-        kwargs=[],
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {}
+        ],
     )
 )
 DKMEANS_LOCAL.append(
@@ -401,50 +416,296 @@ DKMEANS_LOCAL.append(
         ],
         recv=DKMEANS_REMOTE[2].get('send'),
         send='dkm_local_compute_clustering_2',
-        args=[],
-        kwargs=[],
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
     )
 )
 DKMEANS_REMOTE.append(
     dict(  # Remote 3
         do=[
-            dkm_remote.dkm_remote_check_convergence,
-            dkm_remote.dkm_remote_aggregate_output
+            dkm_remote.dkm_remote_check_convergence
         ],
         recv=DKMEANS_LOCAL[3].get('send'),
-        send='dkm_remote_aggregate_output',
-        args=[],
-        kwargs=[],
+        send=None,
+        args=[
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {}
+        ],
     )
 )
 DKMEANS_LOCAL.append(
     dict(  # Local 4
-        do=[dkm_local.dkm_local_compute_optimizer],
-        recv=DKMEANS_REMOTE[3].get('send') + '_false',
+        do=[
+            dkm_local.dkm_local_compute_optimizer
+        ],
+        recv='dkm_remote_converged_false',
         send='dkm_local_compute_optimizer',
-        args=[],
-        kwargs=[],
+        args=[
+            [],
+        ],
+        kwargs=[
+            {},
+        ],
     )
 )
 DKMEANS_LOCAL.append(
     dict(  # Local 5
-        do=[dkm_local.dkm_local_compute_clustering],
-        recv=DKMEANS_REMOTE[3].get('send') + '_true',
-        send='dkm_local_compute_clustering',
-        args=[],
-        kwargs=[],
+        do=[
+            dkm_local.dkm_local_compute_clustering,
+            ops_local.local_output_to_cache,
+            ops_local.local_dump_cache_to_file
+        ],
+        recv='dkm_remote_converged_true',
+        send='dkm_local_final_clustering',
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {'filename': "final_exemplar_clustering.npy"}
+        ],
     )
 )
 DKMEANS_REMOTE.append(
     dict(  # Remote 5
-        do=[dkm_remote.dkm_remote_stop],
+        do=[
+            dkm_remote.dkm_remote_stop,
+            ops_local.local_dump_cache_to_file
+        ],
         recv=DKMEANS_LOCAL[5].get('send'),
         send='dkm_remote_stop',
-        args=[],
-        kwargs=[],
+        args=[
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {'filename': "final_exemplar_clustering.npy"}
+        ],
     )
 )
 # END DKMEANS
+
+
+# DKM_NOEX
+DKM_NOEX_LOCAL = [  # Local 0
+    dict(
+        do=[
+            ops_local.local_noop
+        ],
+        recv=DKMEANS_REMOTE[-1].get('send'),
+        send='dkmnx_local_noop',
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
+    ),
+]
+DKM_NOEX_REMOTE = [  # Remote 0
+    dict(
+        do=[
+            dkm_remote.dkm_remote_init_env,
+            ops_remote.remote_output_to_cache,
+            ops_remote.remote_dump_cache_to_file
+        ],
+        recv=DKM_NOEX_LOCAL[0].get('send'),
+        send='dkmnx_remote_init',
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {"filename": "dkmnx_inputs.npy"}
+        ],
+    )
+]
+
+DKM_NOEX_LOCAL.append(
+    dict(  # Local 1
+        do=[
+            ops_local.local_load_cache_from_file,
+            dkm_local.dkm_local_init_env,
+            ops_local.local_output_to_input,
+            dkm_local.dkm_local_init_centroids
+        ],
+        recv=DKM_NOEX_REMOTE[0].get('send'),
+        send='dkmnx_local_init_centroids',
+        args=[
+            [],
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {'filename': 'window_filenames.json', 'keys': ['all_windows']},
+            {},
+            {},
+            {}
+        ],
+
+    )
+)
+DKM_NOEX_REMOTE.append(
+    dict(  # Remote 1
+        do=[
+            dkm_remote.dkm_remote_init_centroids,
+        ],
+        recv=DKM_NOEX_LOCAL[1].get('send'),
+        send='dkmnx_remote_init_centroids',
+        args=[
+            [],
+        ],
+        kwargs=[
+            {},
+        ],
+    )
+)
+
+DKM_NOEX_LOCAL.append(
+    dict(  # Local 2
+        do=[
+            dkm_local.dkm_local_compute_clustering,
+            ops_local.local_output_to_input,
+            dkm_local.dkm_local_compute_optimizer
+        ],
+        recv=DKM_NOEX_REMOTE[1].get('send'),
+        send='dkmnx_local_compute_optimizer',
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {}
+        ],
+    )
+)
+DKM_NOEX_REMOTE.append(
+    dict(  # Remote 2
+        do=[
+            dkm_remote.dkm_remote_aggregate_optimizer,
+            ops_remote.remote_output_to_input,
+            dkm_remote.dkm_remote_optimization_step
+        ],
+        recv=DKM_NOEX_LOCAL[2].get('send'),
+        send='dkmnx_remote_otpimization_step',
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {}
+        ],
+    )
+)
+DKM_NOEX_LOCAL.append(
+    dict(  # Local 3
+        do=[
+            dkm_local.dkm_local_compute_clustering
+        ],
+        recv=DKM_NOEX_REMOTE[2].get('send'),
+        send='dkmnx_local_compute_clustering_2',
+        args=[
+            []
+        ],
+        kwargs=[
+            {}
+        ],
+    )
+)
+DKM_NOEX_REMOTE.append(
+    dict(  # Remote 3
+        do=[
+            dkm_remote.dkmnx_remote_check_convergence
+        ],
+        recv=DKM_NOEX_LOCAL[3].get('send'),
+        send=None,
+        args=[
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {}
+        ],
+    )
+)
+DKM_NOEX_LOCAL.append(
+    dict(  # Local 4
+        do=[
+            dkm_local.dkm_local_compute_optimizer
+        ],
+        recv='dkmnx_remote_converged_false',
+        send='dkmnx_local_compute_optimizer',
+        args=[
+            [],
+        ],
+        kwargs=[
+            {},
+        ],
+    )
+)
+DKM_NOEX_LOCAL.append(
+    dict(  # Local 5
+        do=[
+            dkm_local.dkm_local_compute_clustering,
+            ops_local.local_output_to_cache,
+            ops_local.local_dump_cache_to_file
+        ],
+        recv='dkmnx_remote_converged_true',
+        send='dkmnx_local_final_clustering',
+        args=[
+            [],
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {},
+            {'filename': "final_full_clustering.npy"}
+        ],
+    )
+)
+DKM_NOEX_REMOTE.append(
+    dict(  # Remote 5
+        do=[
+            dkm_remote.dkm_remote_stop,
+            ops_local.local_dump_cache_to_file
+        ],
+        recv=DKM_NOEX_LOCAL[5].get('send'),
+        send='dkmnx_remote_stop',
+        args=[
+            [],
+            []
+        ],
+        kwargs=[
+            {},
+            {'filename': "final_full_clustering.npy"}
+        ],
+    )
+)
+# END DKM_NOEX
 
 DFNC_STATS_LOCAL = [
     dict(

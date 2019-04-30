@@ -20,7 +20,8 @@ LOCAL_SCICA_PHASES = \
     pk.SPATIALLY_CONSTRAINED_ICA_LOCAL + \
     pk.DFNC_PREPROC_LOCAL_EXEMPLARS + \
     pk.DFNC_PREPROC_LOCAL + \
-    pk.DKMEANS_LOCAL[:2]
+    pk.DKMEANS_LOCAL + \
+    pk.DKM_NOEX_LOCAL
 
 if __name__ == '__main__':
 
@@ -42,6 +43,11 @@ if __name__ == '__main__':
             operation_args = expected_phases.get('args')
             operation_kwargs = expected_phases.get('kwargs')
             for operation, args, kwargs in zip(operations, operation_args, operation_kwargs):
+                if 'input' in parsed_args.keys():
+                    ut.log('Operation %s is getting input with keys %s' %
+                           (operation.__name__, str(parsed_args['input'].keys())), parsed_args['state'])
+                else:
+                    ut.log('Operation %s is not getting any input!' % operation.__name__, parsed_args['state'])
                 try:
                     ut.log("Trying operation %s, with args %s, and kwargs %s" %
                            (operation.__name__, str(args), str(kwargs)), parsed_args["state"])
@@ -73,10 +79,10 @@ if __name__ == '__main__':
                 parsed_args = copy.deepcopy(computation_output)
                 ut.log("Finished with operation %s" %
                        (operation.__name__), parsed_args["state"])
-                ut.log("Operation output is %s" % str(parsed_args), parsed_args["state"])
-            computation_output["output"]["computation_phase"] = expected_phases.get(
-                'send'
-            )
+                ut.log("Operation output has keys %s" % str(parsed_args['output'].keys()), parsed_args["state"])
+            if expected_phases.get('send'):
+                computation_output["output"]["computation_phase"] = expected_phases.get(
+                    'send')
             ut.log("Finished with phase %s" %
                    expected_phases.get("send"), parsed_args["state"])
             break

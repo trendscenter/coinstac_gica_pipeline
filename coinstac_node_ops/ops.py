@@ -88,7 +88,6 @@ def output_to_input(args, phase_prefix="local"):
     }
     for key in args["output"].keys():
         computation_output["input"][key] = args["output"][key]
-    computation_output["output"] = dict()
     return computation_output
 
 
@@ -169,7 +168,7 @@ def clear_cache(args, phase_prefix="local"):
     return computation_output
 
 
-def load_cache_from_file(args, filename="cache.json", phase_prefix="local", keys=[], **kwargs):
+def load_cache_from_file(args, filename=None, phase_prefix="local", keys=[], **kwargs):
     state = args['state']
     # Compile results to be transmitted to remote and cached for reuse in next iteration
     computation_output = ut.default_computation_output(args)
@@ -199,7 +198,7 @@ def load_cache_from_file(args, filename="cache.json", phase_prefix="local", keys
     return computation_output
 
 
-def dump_cache_to_file(args, filename="cache.json", phase_prefix="local", keys=[], **kwargs):
+def dump_cache_to_file(args, filename=None, phase_prefix="local", keys=[], **kwargs):
     state = args['state']
     cache = args['cache']
     if len(keys) == 0:
@@ -214,15 +213,15 @@ def dump_cache_to_file(args, filename="cache.json", phase_prefix="local", keys=[
     loaded = dict()
     try:
         if 'npy' in ext:
-            np.save(in_file)
+            np.save(in_file, cache)
         elif 'json' in ext:
-            json.dump(cache, open(in_file, "r", encoding="utf8"))
+            json.dump(cache, open(in_file, "w"))
         elif 'pkl' in ext:
-            pickle.load(cache, open(in_file, "r", encoding="utf8"))
+            pickle.load(cache, open(in_file, "w"))
         elif 'mat' in ext:
             sio.savemat(in_file, cache)
-    except Exception:
-        pass
+    except Exception as e:
+        raise(Exception("Encountered an exception while saving data... %s" % e))
     computation_output["output"] = {
         "computation_phase": '%s_dump_cache' % phase_prefix,
     }

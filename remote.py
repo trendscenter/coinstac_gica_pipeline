@@ -20,7 +20,8 @@ REMOTE_SCICA_PHASES = \
     pk.SPATIALLY_CONSTRAINED_ICA_REMOTE + \
     pk.DFNC_PREPROC_REMOTE_EXEMPLARS + \
     pk.DFNC_PREPROC_REMOTE + \
-    pk.DKMEANS_REMOTE[:2]
+    pk.DKMEANS_REMOTE + \
+    pk.DKM_NOEX_REMOTE
 
 if __name__ == '__main__':
 
@@ -40,6 +41,12 @@ if __name__ == '__main__':
             operation_args = expected_phases.get('args')
             operation_kwargs = expected_phases.get('kwargs')
             for operation, args, kwargs in zip(operations, operation_args, operation_kwargs):
+                if 'input' in parsed_args.keys():
+                    ut.log('Operation %s is getting input with keys %s' %
+                           (operation.__name__, str(parsed_args['input'].keys())), parsed_args['state'])
+                else:
+                    ut.log('Operation %s is not getting any input!' % operation.__name__, parsed_args['state'])
+
                 try:
                     ut.log("Trying operation %s, with args, and kwargs" %
                            (operation.__name__), parsed_args["state"])
@@ -69,8 +76,9 @@ if __name__ == '__main__':
                        (str(parsed_args.keys()), str(parsed_args['output'].keys())), parsed_args["state"])
             if i+1 == len(PIPELINE):
                 computation_output["success"] = True
-            computation_output["output"]["computation_phase"] = expected_phases.get(
-                'send')
+            if expected_phases.get('send'):
+                computation_output["output"]["computation_phase"] = expected_phases.get(
+                    'send')
             ut.log("Finished with phase %s" %
                    expected_phases.get("send"), parsed_args["state"])
             break

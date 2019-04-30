@@ -22,6 +22,20 @@ COMPUTATION_OUTPUT = {
 }
 
 
+def resolve_args(args):
+    default = default_computation_output(args)
+    return default['state'], default['input'], default['cache']
+
+
+def resolve_input(key, inputs=None, cache=None):
+    if inputs and key in inputs.keys():
+        return inputs[key]
+    elif cache and key in cache.keys():
+        return cache[key]
+    else:
+        raise (ValueError("Expected input with key %s in cache or inputs not detected." % key))
+
+
 def log(msg, state):
     # create logger with 'spam_application'
     logger = logging.getLogger(state["clientId"])
