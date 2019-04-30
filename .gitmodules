@@ -16,9 +16,11 @@
 [submodule "coinstac_decentralized_pca"]
 	path = coinstac_decentralized_pca
 	url = https://github.com/MRN-Code/coinstac-decentralized-pca
+	branch = consolidation
 [submodule "coinstac_decentralized_row_means"]
 	path = coinstac_decentralized_row_means
 	url = https://github.com/MRN-Code/coinstac-decentralized-row-means
+        branch = consolidation
 [submodule "coinstac_spatially_constrained_ica"]
 	path = coinstac_spatially_constrained_ica
 	url = https://github.com/MRN-Code/coinstac_spatially_constrained_ica
