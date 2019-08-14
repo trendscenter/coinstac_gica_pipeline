@@ -7,7 +7,7 @@
         },
         "mask": {
             "value": [
-                "mask.nii"
+                "/computation/local_data/mask.nii"
             ]
         },
         "ica_method": {
@@ -22,7 +22,7 @@
         },
         "scica_template": {
             "value": [
-                "NeuroMark.nii"
+                "/computation/local_data/NeuroMark.nii"
             ]
         },
         "fnc_method": {
@@ -49,7 +49,7 @@
         },
         "mask": {
             "value": [
-                "mask.nii"
+                "/computation/local_data/mask.nii"
             ]
         },
         "ica_method": {
@@ -64,7 +64,7 @@
         },
         "scica_template": {
             "value": [
-                "NeuroMark.nii"
+                "/computation/local_data/NeuroMark.nii"
             ]
         },
         "fnc_method": {
