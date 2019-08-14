@@ -32,7 +32,7 @@
                 ]
             },
             "mask": {
-                "defaultValue": "./local_data/mask.nii",
+                "defaultValue": "/computation/local_data/mask.nii",
                 "label": "Mask",
                 "type": "string",
                 "source": "owner"
