@@ -1,8 +1,11 @@
 [
     {
-        "datafile": {
+        "data": {
             "value": [
-                "local0.data.csv"
+              "vsdwa_000995291749_0002.nii",
+              "vsdwa_001026388911_0002.nii",
+              "vsdwa_002041994687_0002.nii",
+              "vsdwa_002066918246_0002.nii"
             ]
         },
         "mask": {
@@ -42,9 +45,12 @@
         }
     },
     {
-        "datafile": {
+        "data": {
             "value": [
-                "local1.data.csv"
+              "vsdwa_000306518979_0002.nii",
+              "vsdwa_000353504997_0002.nii",
+              "vsdwa_000902592889_0002.nii",
+              "vsdwa_002061891664_0002.nii"
             ]
         },
         "mask": {
