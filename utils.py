@@ -91,19 +91,21 @@ def read_file_list_csv(filename, baseDir, clientId, data_colname="nii"):
     return file_list
 
 
-def read_data(file_list, file_type, clientId):
+def read_data(base_directory, file_list, file_type, clientId):
     """ Read data files.
     """
     if file_list:
         datasets = dict()  # Container for file contents
         for ix, filename in enumerate(file_list):
 
+            file = os.path.join(base_directory, filename);
+
             if file_type == 'textfile':
-                datasets[str(ix)] = np.loadtxt(filename)
+                datasets[str(ix)] = np.loadtxt(file)
             if file_type == 'npzfile':
-                datasets[str(ix)] = np.load(filename)['dataset'].T
+                datasets[str(ix)] = np.load(file)['dataset'].T
             if file_type == 'nii':
-                datasets[str(ix)] = np.array(nib.load(filename).get_data())
+                datasets[str(ix)] = np.array(nib.load(file).get_data())
     else:
         raise ValueError(
             "No files listed for site: {localID}".format(localID=clientId))
