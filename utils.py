@@ -111,3 +111,43 @@ def read_data(base_directory, file_list, file_type, clientId):
             "No files listed for site: {localID}".format(localID=clientId))
 
     return datasets
+
+def get_interpolated_nifti(template_filename, input_filename, destination_dir=None):
+    '''
+        Get an interpolated version of an file which is interpolated to match a reference.
+        First, check if interpolated dimensions of nifti files match, if so, just return the input_filename.
+        Else, if an interpolated version of the file has been created and saved in the root directory before, return its filename,
+            else, create the interpolated version, and return its filename.
+
+        Args:
+            template_filename - the filename which has the desired spatial dimension
+            input_filename - the filename to be interpolated
+
+        Template for interpolated filenames example:
+            input_filename = ' example.nii ' has dimension 53 x 63 x 52
+            template_filename = 'template.nii' has dimension 53 x 63 x 46
+            output_filename = 'example_INTERP_53_63_46.nii' has dimension 53 x 63 x 46
+    '''
+
+    base_dir = os.path.dirname(input_filename)
+    input_prefix, input_ext = os.path.splitext(input_filename)
+    template_img = nib.load(template_filename)
+    input_img = nib.load(input_filename)
+    template_img = template_img.slicer[:, :, :, :input_img.shape[3]]
+    template_dim = template_img.shape
+
+    if input_img.shape == template_dim:
+        return input_filename
+
+    output_filename = os.path.join(
+        base_dir, "%s_INTERP_%d_%d_%d.nii" % (input_prefix, template_img.shape[0], template_img.shape[1], template_img.shape[2]))
+
+    if os.path.exists(output_filename):
+        return output_filename
+
+    output_img = resample_from_to(input_img, template_img)
+    if destination_dir is not None:
+        output_filename = os.path.join(destination_dir, os.path.basename(output_filename))
+    nib.save(output_img, output_filename)
+
+    return output_filename
