@@ -6,3 +6,4 @@ curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=`awk '/do
 #wget --no-check-certificate 'https://docs.google.com/uc?export=download&id='${fileid} -O ${filename}
 unzip GICA.zip -d .
 cp GroupICATv4.0b_standalone_aug_8_2019/MCRInstaller.zip . -v
+rm -r GroupICATv4.0b_standalone_aug_8_2019 -v

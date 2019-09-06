@@ -37,7 +37,7 @@ WORKDIR /computation
 #RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #USER docker
 #RUN cd /computation/groupicatv4.0b/GroupICATv4.0b_standalone_aug_8_2019 && unzip MCRInstaller.zip -d /tmp/MCRInstaller &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes
-RUN bash download_mcr.sh && unzip MCRInstaller.zip -d /tmp/MCRInstaller &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes
+RUN bash download_mcr.sh && unzip MCRInstaller.zip -d /tmp/MCRInstaller && rm MCRInstaller.zip &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes 
 
 # Copy the current directory contents into the container
 COPY requirements.txt /computation
