@@ -14,12 +14,12 @@ else
   #echo Setting up environment variables
   #:/usr/local/MATLAB/MATLAB_Runtime/v91/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v91/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v91/sys/os/glnxa64:
   #/usr/local/MATLAB/MATLAB_Runtime/v91/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v91/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v91/sys/os/glnxa64:
-  MCRROOT="/usr/local/MATLAB/MATLAB_Runtime/v901"
+  MCRROOT="/usr/local/MATLAB/MATLAB_Runtime"
   echo ---
-  LD_LIBRARY_PATH=.:${MCRROOT}/runtime/glnxa64 ;
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/bin/glnxa64 ;
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64;
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
+  LD_LIBRARY_PATH=.:${MCRROOT}/v91/runtime/glnxa64 ;
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/v91/bin/glnxa64 ;
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/v91/sys/os/glnxa64;
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/v91/sys/opengl/lib/glnxa64;
   export LD_LIBRARY_PATH;
   XAPPLRESDIR=${MCROOT}/v91/X11/app-defaults;
   export XAPPLRESDIR;
