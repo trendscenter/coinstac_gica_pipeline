@@ -16,15 +16,18 @@ RUN apt-get update && apt-get install -y \
     libcairo2-dev gconf2 \
     libsndfile1-dev libxcb1-dev libxslt-dev \
     curl \
+    libgtk-3-dev \
     sudo
 
-#RUN mkdir /tmp/mcr_installer && \
-#    cd /tmp/mcr_installer && \
-#    wget http://ssd.mathworks.com/supportfiles/downloads/R2016b/deployment_files/R2016b/installers/glnxa64/MCR_R2016b_glnxa64_installer.zip && \
-#    unzip MCR_R2016b_glnxa64_installer.zip && \
-#    ./install -mode silent -agreeToLicense yes && \
-#    rm -Rf /tmp/mcr_installer
-
+RUN cd /usr/local && wget http://ftp.mozilla.org/pub/firefox/releases/69.0/linux-x86_64/en-US/firefox-69.0.tar.bz2 && tar xvjf firefox-69.0.tar.bz2 && ln -s /usr/local/firefox/firefox /usr/bin/firefox
+RUN export BROWSER=/usr/bin/firefox
+RUN /usr/bin/firefox -headless --setDefaultBrowser &
+RUN mkdir /tmp/mcr_installer && \
+    cd /tmp/mcr_installer && \
+    wget http://ssd.mathworks.com/supportfiles/downloads/R2016b/deployment_files/R2016b/installers/glnxa64/MCR_R2016b_glnxa64_installer.zip && \
+    unzip MCR_R2016b_glnxa64_installer.zip && \
+    ./install -mode silent -agreeToLicense yes && \
+    rm -Rf /tmp/mcr_installer
 
 # FROM coinstac/coinstac-base-python-stream
 
@@ -37,7 +40,7 @@ WORKDIR /computation
 #RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #USER docker
 #RUN cd /computation/groupicatv4.0b/GroupICATv4.0b_standalone_aug_8_2019 && unzip MCRInstaller.zip -d /tmp/MCRInstaller &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes
-RUN bash download_mcr.sh && unzip MCRInstaller.zip -d /tmp/MCRInstaller && rm MCRInstaller.zip &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes 
+#RUN bash download_mcr.sh && unzip MCRInstaller.zip -d /tmp/MCRInstaller && rm MCRInstaller.zip &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes 
 
 # Copy the current directory contents into the container
 COPY requirements.txt /computation
