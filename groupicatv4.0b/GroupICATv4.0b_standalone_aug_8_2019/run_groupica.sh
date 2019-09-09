@@ -31,7 +31,7 @@ else
       args="${args} \"${token}\"" 
       shift
   done
-  eval "\"${exe_dir}/groupica\"" $args
+  eval "\"${exe_dir}/groupica -nodisplay\"" $args
 fi
 exit
 
