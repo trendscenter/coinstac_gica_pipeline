@@ -16,10 +16,7 @@ RUN apt-get update && apt-get install -y \
     libcairo2-dev gconf2 \
     libsndfile1-dev libxcb1-dev libxslt-dev \
     curl \
-    libgtk-3-dev \
-    sudo \
-    firefox \
-    default-jdk
+    libgtk-3-dev 
 
 #RUN cd /usr/local && wget http://ftp.mozilla.org/pub/firefox/releases/69.0/linux-x86_64/en-US/firefox-69.0.tar.bz2 && tar xvjf firefox-69.0.tar.bz2 && ln -s /usr/local/firefox/firefox /usr/bin/firefox
 #RUN export BROWSER=/usr/bin/firefox
