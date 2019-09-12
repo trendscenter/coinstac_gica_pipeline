@@ -31,8 +31,6 @@ RUN mkdir /tmp/mcr_installer && \
 # FROM coinstac/coinstac-base-python-stream
 
 # Set the working directory
-COPY . /computation
-WORKDIR /computation
 #COPY groupicatv4.0b /computation/groupicatv4.0b
 #RUN adduser --disabled-password --gecos '' docker
 #RUN adduser docker sudo
@@ -42,11 +40,14 @@ WORKDIR /computation
 #RUN bash download_mcr.sh && unzip MCRInstaller.zip -d /tmp/MCRInstaller && rm MCRInstaller.zip &&  cd /tmp/MCRInstaller  && sudo ./install -mode silent -agreeToLicense yes 
 
 # Copy the current directory contents into the container
+WORKDIR /computation
 COPY requirements.txt /computation
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
+
+COPY . /computation
 
 COPY ./coinstac_spatially_constrained_ica/nipype-0.10.0/nipype/interfaces/gift /usr/local/lib/python3.6/site-packages/nipype/interfaces/gift
 

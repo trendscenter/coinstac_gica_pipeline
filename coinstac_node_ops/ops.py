@@ -68,6 +68,16 @@ def input_to_cache(args, phase_prefix="local"):
     computation_output["input"] = dict()
     return computation_output
 
+def input_to_output(args, phase_prefix="local"):
+    inputs = args['input']
+    # Compile results to be transmitted to remote and cached for reuse in next iteration
+    computation_output = ut.default_computation_output(args)
+    computation_output["output"] = {
+        "computation_phase": '%s_input_to_cache' % phase_prefix
+    }
+    for key in inputs.keys():
+        computation_output["output"][key] = inputs[key]
+    return computation_output
 
 def output_to_cache(args, phase_prefix="local"):
     # Compile results to be transmitted to remote and cached for reuse in next iteration

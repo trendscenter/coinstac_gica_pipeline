@@ -705,6 +705,31 @@ DKM_NOEX_REMOTE.append(
         ],
     )
 )
+
+DKM_NOEX_LOCAL.append(
+    dict(
+        do=[
+            scica_local.scica_check_out
+        ],
+        recv='dkmnx_remote_stop',
+        send='dkmnx_local_check',
+        args=[[]],
+        kwargs=[{}],
+    )
+)
+
+DKM_NOEX_REMOTE.append(
+    dict(
+        do=[
+            ops_remote.remote_noop,
+        ],
+        recv='dkmnx_local_check',
+        send='dkmnx_remote_final',
+        args=[[]],
+        kwargs=[{}],
+)
+)
+
 # END DKM_NOEX
 
 DFNC_STATS_LOCAL = [
@@ -718,7 +743,9 @@ DFNC_STATS_LOCAL = [
 ]
 DFNC_STATS_REMOTE = [
     dict(
-        do=[],
+        do=[
+        
+        ],
         recv=DFNC_STATS_LOCAL[0].get('send'),
         send='dkm_remote_stats',
         args=[],
