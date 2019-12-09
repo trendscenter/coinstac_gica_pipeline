@@ -4,15 +4,6 @@
 [submodule "coinstac_backreconstruction"]
 	path = coinstac_backreconstruction
 	url = https://github.com/MRN-Code/coinstac_backreconstruction.git
-[submodule "coinstac_ddfnc_preproc"]
-	path = coinstac_ddfnc_preproc
-	url = https://github.com/MRN-Code/coinstac_ddfnc_preproc.git
-[submodule "coinstac_dkmeans_ss"]
-	path = coinstac_dkmeans_ss
-	url = https://github.com/MRN-Code/coinstac_dkmeans_ss.git
-[submodule "coinstac_dkmeans_ms"]
-	path = coinstac_dkmeans_ms
-	url = https://github.com/MRN-Code/coinstac_dkmeans_ms.git
 [submodule "coinstac_decentralized_pca"]
 	path = coinstac_decentralized_pca
 	url = https://github.com/MRN-Code/coinstac-decentralized-pca
