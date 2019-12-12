@@ -27,21 +27,6 @@
             "value": [
                 "/computation/local_data/NeuroMark.nii"
             ]
-        },
-        "fnc_method": {
-            "value": [
-                null
-            ]
-        },
-        "fnc_window_size": {
-            "value": [
-                22
-            ]
-        },
-        "dfnc_k": {
-            "value": [
-                5
-            ]
         }
     },
     {
@@ -71,21 +56,6 @@
         "scica_template": {
             "value": [
                 "/computation/local_data/NeuroMark.nii"
-            ]
-        },
-        "fnc_method": {
-            "value": [
-                null
-            ]
-        },
-        "fnc_window_size": {
-            "value": [
-                22
-            ]
-        },
-        "dfnc_k": {
-            "value": [
-                5
             ]
         }
     }

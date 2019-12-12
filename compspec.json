@@ -1,21 +1,21 @@
 {
     "meta": {
-        "name": "decentralized dfnc",
-        "id": "ddfnc",
+        "name": "decentralized gica",
+        "id": "dgica",
         "version": "v1.0.0",
         "repository": "",
-        "description": "a demo for decentralized dfnc"
+        "description": "a demo for decentralized gica"
     },
     "computation": {
         "type": "docker",
-        "dockerImage": "ddfnc",
+        "dockerImage": "dgica",
         "command": [
             "python",
             "\/computation\/local.py"
         ],
         "remote": {
             "type": "docker",
-            "dockerImage": "ddfnc",
+            "dockerImage": "dgica",
             "command": [
                 "python",
                 "\/computation\/remote.py"
@@ -48,23 +48,6 @@
                 "defaultValue": "NeuroMark.nii",
                 "label": "Spatially Constrained ICA Template",
                 "type": "list/file"
-            },
-            "fnc_method": {
-                "defaultValue": null,
-                "label": "Kind of FNC to perform",
-                "type": "string"
-            },
-            "fnc_window_size": {
-                "defaultValue": 22,
-                "label": "Size of dFNC sliding window",
-                "type": "number",
-                "source": "owner"
-            },
-            "dfnc_k": {
-                "defaultValue": 5,
-                "label": "Number of dFNC clusters",
-                "type": "number",
-                "source": "owner"
             }
         },
         "output": {}
