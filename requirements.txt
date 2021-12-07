@@ -9,4 +9,3 @@ setuptools==40.6.3
 nipy==0.5.0
 scikit_learn==0.20.3
 theano==1.0.4
-pydevd-pycharm~=212.5457.59
