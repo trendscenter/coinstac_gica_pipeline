@@ -1,5 +1,5 @@
 nipype==1.1.7
-ujson==1.35
+ujson==5.2.0
 numpy==1.15.4
 pandas==0.24.2
 matplotlib==3.0.1
