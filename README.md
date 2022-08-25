@@ -1,8 +1,10 @@
-# Coinstac Group ICA/ddFNC Pipeline
+# Coinstac Group ICA Pipeline
 
-This repository compiles submodules utilized for Group ICA and ddFNC.
+This repository compiles submodules utilized for Group ICA, WITHOUT ddFNC as an option.
 
-The ddFNC pipeline consists of two distinct parts - Group or Spatially Constrained ICA first, followed by ddFNC.
+This repository allows for decentralized group ICA, decentralized joint ICA, and decentralized auto-ICA (spatially constrained ICA). To cite the papers for each of these methods, please use the following reference:
+```
+```
 
 ## Running in the Simulator
 
@@ -18,7 +20,7 @@ npm i -g coinstac-simulator
 Download this repository
 
 ```
-git clone https://github.com/MRN-Code/coinstac_ddfnc_pipeline.git
+git clone git@github.com:trendscenter/coinstac_gica_pipeline.git
 ```
 
 Initialize submodules
@@ -38,8 +40,6 @@ bash copy_data.sh
 ```
 cp test/remote/simulatorRun/mask.nii test/local0/simulatorRun/ ;
 cp test/remote/simulatorRun/mask.nii test/local1/simulatorRun/ ;
-cp test/remote/simulatorRun/NeuroMark.nii test/local0/simulatorRun/ ;
-cp test/remote/simulatorRun/NeuroMark.nii test/local1/simulatorRun/ ;
 ```
 
 Finally, run using the bash script (will require entry of password for **sudo**)
@@ -53,7 +53,7 @@ bash run.sh
 Run using the following commands
 
 ```
-sudo docker build  -t ddfnc .
+sudo docker build  -t gica .
 sudo coinstac-simulator
 ```
 
@@ -71,9 +71,12 @@ The stages of Group ICA are:
  - decentralized PCA
  - local ICA (either with Infomax ICA, spatially-constrained ICA, or other)
 
-## ddFNC
+## Joint ICA
 
-The stages of ddFNC are:
- - Group/ScICA ICA (as given above)
- - Local post-processing of timecourses (including windowing)
- - Decentralized Clustering
+The stages of Joint ICA are:
+
+---
+
+## Linked Repositories/Submodules
+
+Briefly, there are a number of linked repositories attached to this pipeline.

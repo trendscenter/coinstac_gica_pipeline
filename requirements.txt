@@ -6,6 +6,7 @@ matplotlib==3.0.1
 scipy==1.2.0
 nibabel==2.3.3
 setuptools==40.6.3
-nipy==0.4.2
 scikit_learn==0.20.3
 theano==1.0.4
+h5py
+hdfdict
