@@ -2,16 +2,32 @@
     {
         "data": {
             "value": [
-              "vsdwa_000995291749_0002.nii",
-              "vsdwa_001026388911_0002.nii",
-              "vsdwa_002041994687_0002.nii",
-              "vsdwa_002066918246_0002.nii"
+                "rtswa_1TR_M511.nii",
+                "rtswa_1YM_2X11.nii",
+                "rtswa_34F_YG11.nii",
+                "rtswa_1DH_NL11.nii",
+                "rtswa_1MD_F111.nii",
+                "rtswa_2CF_YT11.nii",
+                "rtswa_14R_3F11.nii",
+                "rtswa_1SF_MB11.nii",
+                "rtswa_2RG_F111.nii",
+                "rtswa_1NB_NL11.nii",
+                "rtswa_2LV_YG11.nii",
+                "rtswa_2EX_YG11.nii",
+                "rtswa_3FW_6J11.nii",
+                "rtswa_33N_7P11.nii",
+                "rtswa_1JR_S911.nii",
+                "rtswa_38R_F111.nii",
+                "rtswa_1VX_F111.nii",
+                "rtswa_2ZG_F111.nii",
+                "rtswa_3JG_NL11.nii",
+                "rtswa_383_F111.nii",
+                "covariates.csv",
+                "covariate_keys.csv"
             ]
         },
         "mask": {
-            "value": [
-                "/computation/local_data/mask.nii"
-            ]
+            "value": "/computation/local_data/mask.nii"
         },
         "ica_method": {
             "value": [
@@ -19,29 +35,184 @@
             ]
         },
         "num_ics": {
-            "value": [
-                20
-            ]
+            "value": 20
         },
         "scica_template": {
+            "value": "/computation/local_data/NeuroMark.nii"
+        },
+        "covariates": {
+            "value": "covariates.csv"
+        },
+        "covariate_types": {
+            "value": "covariate_keys.csv"
+        },
+        "interactions": {
+            "value": []
+        },
+        "features": {
             "value": [
-                "/computation/local_data/NeuroMark.nii"
+                "fnc correlations",
+                "timecourses spectra"
             ]
+        },
+        "TR": {
+            "value": 2
+        },
+        "numOfPCs": {
+            "value": [
+                5,
+                5,
+                5
+            ]
+        },
+        "univariate_test_list": {
+            "value": [
+                {
+                    "regression": {
+                        "gender": [
+                            "age"
+                        ],
+                        "age": [
+                            "gender"
+                        ]
+                    }
+                }
+            ]
+        },
+        "t_threshold": {
+            "value": 1.0
+        },
+        "freq_limits": {
+            "value": [
+                0.1,
+                0.15
+            ]
+        },
+        "p_threshold": {
+            "value": 1.0
+        },
+        "display_p_threshold": {
+            "value": 1.0
+        },
+        "comp_network_names": {
+            "value": {
+                "SC": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "AUD": [
+                    6,
+                    7
+                ],
+                "SM": [
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16
+                ],
+                "VIS": [
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    22,
+                    23,
+                    24,
+                    25
+                ],
+                "CC": [
+                    26,
+                    27,
+                    28,
+                    29,
+                    30,
+                    31,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36,
+                    37,
+                    38,
+                    39,
+                    40,
+                    41,
+                    42
+                ],
+                "DMN": [
+                    43,
+                    44,
+                    45,
+                    46,
+                    47,
+                    48,
+                    49
+                ],
+                "CR": [
+                    50,
+                    51,
+                    52,
+                    53
+                ]
+            }
+        },
+        "image_values": {
+            "value": "positive"
+        },
+        "threshdesc": {
+            "value": "none"
+        },
+        "gica_input_dir": {
+            "value": ""
+        },
+        "skip_gica":{
+            "value": false
+        },
+        "run_mancova": {
+            "value": false
+        },
+        "run_univariate_tests": {
+            "value": true
         }
     },
     {
         "data": {
             "value": [
-              "vsdwa_000306518979_0002.nii",
-              "vsdwa_000353504997_0002.nii",
-              "vsdwa_000902592889_0002.nii",
-              "vsdwa_002061891664_0002.nii"
+                "rtswa_1FA_NL11.nii",
+                "rtswa_2WJ_E511.nii",
+                "rtswa_255_NL11.nii",
+                "rtswa_3G7_F111.nii",
+                "rtswa_11G_1G11.nii",
+                "rtswa_26F_BA11.nii",
+                "rtswa_1TN_F111.nii",
+                "rtswa_2TD_MB11.nii",
+                "rtswa_18S_NL11.nii",
+                "rtswa_1CJ_NL11.nii",
+                "rtswa_156_NL11.nii",
+                "rtswa_2P7_2X31.nii",
+                "rtswa_2A5_NL11.nii",
+                "rtswa_1BW_1G11.nii",
+                "rtswa_1GG_NX11.nii",
+                "rtswa_1NF_BN11.nii",
+                "rtswa_2HA_F111.nii",
+                "rtswa_1D6_4311.nii",
+                "rtswa_1RB_B211.nii",
+                "rtswa_1PH_5811.nii",
+                "covariates.csv",
+                "covariate_keys.csv"
             ]
         },
         "mask": {
-            "value": [
-                "/computation/local_data/mask.nii"
-            ]
+            "value": "/computation/local_data/mask.nii"
         },
         "ica_method": {
             "value": [
@@ -49,14 +220,153 @@
             ]
         },
         "num_ics": {
-            "value": [
-                20
-            ]
+            "value": 20
         },
         "scica_template": {
+            "value": "/computation/local_data/NeuroMark.nii"
+        },
+        "covariates": {
+            "value": "covariates.csv"
+        },
+        "covariate_types": {
+            "value": "covariate_keys.csv"
+        },
+        "interactions": {
+            "value": []
+        },
+        "features": {
             "value": [
-                "/computation/local_data/NeuroMark.nii"
+                "fnc correlations",
+                "timecourses spectra"
             ]
+        },
+        "TR": {
+            "value": 2
+        },
+        "numOfPCs": {
+            "value": [
+                5,
+                5,
+                5
+            ]
+        },
+        "univariate_test_list": {
+            "value": [
+                {
+                    "regression": {
+                        "gender": [
+                            "age"
+                        ],
+                        "age": [
+                            "gender"
+                        ]
+                    }
+                }
+            ]
+        },
+        "t_threshold": {
+            "value": 1.0
+        },
+        "freq_limits": {
+            "value": [
+                0.1,
+                0.15
+            ]
+        },
+        "p_threshold": {
+            "value": 1.0
+        },
+        "display_p_threshold": {
+            "value": 1.0
+        },
+        "comp_network_names": {
+            "value": {
+                "SC": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "AUD": [
+                    6,
+                    7
+                ],
+                "SM": [
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16
+                ],
+                "VIS": [
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    22,
+                    23,
+                    24,
+                    25
+                ],
+                "CC": [
+                    26,
+                    27,
+                    28,
+                    29,
+                    30,
+                    31,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36,
+                    37,
+                    38,
+                    39,
+                    40,
+                    41,
+                    42
+                ],
+                "DMN": [
+                    43,
+                    44,
+                    45,
+                    46,
+                    47,
+                    48,
+                    49
+                ],
+                "CR": [
+                    50,
+                    51,
+                    52,
+                    53
+                ]
+            }
+        },
+        "image_values": {
+            "value": "positive"
+        },
+        "threshdesc": {
+            "value": "none"
+        },
+        "gica_input_dir": {
+            "value": ""
+        },
+        "skip_gica":{
+            "value": false
+        },
+        "run_mancova": {
+            "value": false
+        },
+        "run_univariate_tests": {
+            "value": true
         }
     }
 ]

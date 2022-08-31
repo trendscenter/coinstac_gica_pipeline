@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep 28 16:08:00 2018 (MDT)
+@author: Bradley Baker
 
-@author: Rogers F. Silva
+This file is a generic controller for local computations based on the "phase_keys" computation design. This file controls the local nodes.
+The basic idea is that computations are designed to start on local nodes, and flow to the remote, then back again, and so on. 
+At each switch between local and remote, a "phase_key" is sent from the local to remote and vice-versa to indicate the 
+       location in the computation where local or remote node should continue. 
+The phase_keys data structure is as follows:
+       a python dictionary with three keys: "do", "recv" and "send".
+       The "do" key holds a list, which has a list of function handles which are called in sequence. 
+              The output from each function is directly fed as the input into the next function, and 
+              the output from the final function is input to the next phase in the next decentralized iteration.
+       The "recv" key is a string, which indicates the expected phase key to receive prior to computing. 
+              **Local computations should expect to receive remote phase-keys and vice-versa**
+       The "send" key is a string, which indicates the phase key to send to the next step in the computation. 
+
 """
 
 import ujson as json

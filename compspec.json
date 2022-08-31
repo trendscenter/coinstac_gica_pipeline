@@ -1,21 +1,21 @@
 {
     "meta": {
-        "name": "decentralized gica",
+        "name": "decentralized ica",
         "id": "dgica",
         "version": "v1.0.0",
         "repository": "",
-        "description": "a demo for decentralized gica"
+        "description": "a demo for decentralized ica"
     },
     "computation": {
         "type": "docker",
-        "dockerImage": "dgica",
+        "dockerImage": "gica",
         "command": [
             "python",
             "\/computation\/local.py"
         ],
         "remote": {
             "type": "docker",
-            "dockerImage": "dgica",
+            "dockerImage": "gica",
             "command": [
                 "python",
                 "\/computation\/remote.py"
