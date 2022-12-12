@@ -29,7 +29,7 @@ class GICACommandInputSpec(GIFTCommandInputSpec):
     numWorkers = traits.Int( mandatory = False, desc = 'Number of parallel workers')	
     display_results = traits.Int( mandatory = False, desc = '0 - No display, 1 - HTML report, 2 - PDF')
     network_summary_opts = traits.Dict(mandatory=False, desc='dictionary containing network summary options')
-	
+    modalityType = traits.Str(mandatory = False, desc="Options are fMRI, EEG, and smri. ")
 
 class GICACommandOutputSpec(MatlabInputSpec):
     matlab_output = traits.Str( )
@@ -99,6 +99,10 @@ class GICACommand(GIFTCommand):
         commandstr.append("\n");
         commandstr.append("dataSelectionMethod = 4;\n");
         commandstr.append("\n");
+        if isdefined(self.inputs.modalityType):
+            commandstr.append("%% modalityType may be fMRI, EEG, and smr \n");
+            commandstr.append("modalityType = '%s';\n" % (self.inputs.modalityType));
+            commandstr.append("\n")
         commandstr.append("%% Input file patterns\n");
         commandstr.append("input_data_file_patterns = {");
         
