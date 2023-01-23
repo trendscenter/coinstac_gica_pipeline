@@ -50,6 +50,9 @@ RUN mkdir /output
 
 COPY ./groupicatv4.0b /computation/groupicatv4.0b
 COPY ./groupicatv4.0b /app/groupicatv4.0b
+# Add a new version of GIFT still running on MATLAB 2016b
+COPY ./groupica_git_012423 /computation/groupica_git_012423
+COPY ./groupica_git_012423 /app/groupica_git_012423
 
 RUN (timeout 20s /app/groupicatv4.0b/GroupICATv4.0b_standalone/run_groupica.sh /usr/local/MATLAB/MATLAB_Runtime/v91/; exit 0)
 
