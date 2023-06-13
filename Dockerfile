@@ -48,9 +48,7 @@ RUN mkdir -p /computation/mcrcache
 
 RUN mkdir /output
 
-COPY ./groupicatv4.0b /computation/groupicatv4.0b
-COPY ./groupicatv4.0b /app/groupicatv4.0b
-# Add a new version of GIFT still running on MATLAB 2016b
+# GIFT version from 012423 still running on MATLAB 2016b
 COPY ./groupicatv4.0b/groupica_git_012423 /computation/groupica_git_012423
 COPY ./groupicatv4.0b/groupica_git_012423 /app/groupica_git_012423
 
