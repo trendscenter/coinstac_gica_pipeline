@@ -14,7 +14,8 @@
         branch = consolidation
 [submodule "coinstac_spatially_constrained_ica"]
 	path = coinstac_spatially_constrained_ica
-	url = https://github.com/MRN-Code/coinstac_spatially_constrained_ica
+	url = git@github.com:trendscenter/coinstac_spatially_constrained_ica.git
+	branch = bbradt-patch-neuromark
 [submodule "coinstac_masking"]
 	path = coinstac_masking
 	url = https://github.com/MRN-Code/coinstac_masking.git
