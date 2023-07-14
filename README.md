@@ -2,10 +2,6 @@
 
 This repository compiles submodules utilized for Group ICA, WITHOUT ddFNC as an option.
 
-This repository allows for decentralized group ICA  and decentralized auto-ICA (spatially constrained ICA). To cite the papers for each of these methods, please use the following reference:
-```
-```
-
 ## Running in the Simulator
 
 This pipeline has been tested with the latest version of the COINSTAC simulator.
