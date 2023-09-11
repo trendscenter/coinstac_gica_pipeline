@@ -63,12 +63,6 @@ RUN wget -P /app/groupica_v4.0.4.11 https://trends-public-website-fileshare.s3.a
 RUN wget -P /app/groupica_v4.0.4.11 https://trends-public-website-fileshare.s3.amazonaws.com/public_website_files/software/gift/software/stand_alone/coinstac/082223/coinstac-giftv4.0.4.11_Lnx2016b/readme.txt
 RUN wget -P /app/groupica_v4.0.4.11 https://trends-public-website-fileshare.s3.amazonaws.com/public_website_files/software/gift/software/stand_alone/coinstac/082223/coinstac-giftv4.0.4.11_Lnx2016b/mccExcludedFiles.log
 
-# Remove 4 lines below if groupica v4.0.4.11 works
-# GIFT version from 012423 still running on MATLAB 2016b
-COPY ./groupicatv4.0b/groupica_git_012423 /computation/groupica_git_012423
-COPY ./groupicatv4.0b/groupica_git_012423 /app/groupica_git_012423
-# Remove 4 lines above if groupica v4.0.4.11 works
-
 RUN (timeout 20s /app/groupicatv4.0b/GroupICATv4.0b_standalone/run_groupica.sh /usr/local/MATLAB/MATLAB_Runtime/v91/; exit 0)
 
 COPY ./coinstac_masking /computation/coinstac_masking
