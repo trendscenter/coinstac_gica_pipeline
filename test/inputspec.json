@@ -21,9 +21,7 @@
                 "rtswa_1VX_F111.nii",
                 "rtswa_2ZG_F111.nii",
                 "rtswa_3JG_NL11.nii",
-                "rtswa_383_F111.nii",
-                "covariates.csv",
-                "covariate_keys.csv"
+                "rtswa_383_F111.nii"
             ]
         },
         "mask": {
@@ -206,9 +204,7 @@
                 "rtswa_2HA_F111.nii",
                 "rtswa_1D6_4311.nii",
                 "rtswa_1RB_B211.nii",
-                "rtswa_1PH_5811.nii",
-                "covariates.csv",
-                "covariate_keys.csv"
+                "rtswa_1PH_5811.nii"
             ]
         },
         "mask": {

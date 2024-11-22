@@ -3,6 +3,7 @@
         "name": "decentralized ica",
         "id": "dgica",
         "version": "v1.0.0",
+        "compspecVersion": 2,
         "repository": "",
         "description": "a demo for decentralized ica"
     },
